@@ -41,7 +41,7 @@
       z-index: 1;
     }
 
-    /* Main Phone-style Container */
+    /* Main Container */
     .viewer {
       position: relative;
       z-index: 2;
@@ -57,7 +57,6 @@
       flex-direction: column;
     }
 
-    /* Slides */
     .slide-frame {
       position: relative;
       flex: 1;
@@ -79,10 +78,9 @@
 
     .slide-img.active {
       opacity: 1;
-      transform: scale(1.08); /* Subtle Ken-Burns zoom */
+      transform: scale(1.08);
     }
 
-    /* Greeting Banner */
     .overlay-content {
       position: absolute;
       bottom: 0;
@@ -110,7 +108,6 @@
       text-shadow: 0 1px 5px rgba(0,0,0,0.5);
     }
 
-    /* Progress bar */
     .progress-bar {
       position: absolute;
       top: 15px;
@@ -178,7 +175,6 @@
 </head>
 <body>
 
-  <!-- Background Blur -->
   <div class="bg-blur" id="bgBlur"></div>
 
   <!-- Opening Reveal Screen -->
@@ -187,14 +183,11 @@
     <div class="tap-text">Tap to Open Your Birthday Surprise ✨</div>
   </div>
 
-  <!-- Mobile Reel Frame -->
+  <!-- Main View -->
   <div class="viewer">
-    <!-- Instagram-style top progress bar -->
     <div class="progress-bar" id="progressBar"></div>
 
-    <div class="slide-frame" id="slideFrame">
-      <!-- Photos injected by JS -->
-    </div>
+    <div class="slide-frame" id="slideFrame"></div>
 
     <div class="overlay-content">
       <h1 class="title">Happy Birthday Swathi! 🌸</h1>
@@ -202,13 +195,13 @@
     </div>
   </div>
 
-  <!-- Audio Player -->
-  <audio id="bgMusic" loop>
-    <source src="song.mp3" type="audio/mpeg">
+  <!-- Audio Player with your exact song filename -->
+  <audio id="bgMusic" preload="auto">
+    <source src="Clean Bandit - Rather Be (Lyrics) feat. Jess Glynne.mp3" type="audio/mpeg">
+    <source src="Clean%20Bandit%20-%20Rather%20Be%20(Lyrics)%20feat.%20Jess%20Glynne.mp3" type="audio/mpeg">
   </audio>
 
   <script>
-    // YOUR 19 PHOTOS LIST
     const images = [
       "IMG-20260920-WA0007.jpg",
       "IMG-20260920-WA0002.jpg",
@@ -237,14 +230,12 @@
     const bgMusic = document.getElementById("bgMusic");
 
     let currentIndex = 0;
-    const slideDuration = 2200; // 2.2 seconds per photo (matches tempo)
+    const slideDuration = 2200;
 
-    // Build the slides & progress dots
     images.forEach((src, idx) => {
       const img = document.createElement("img");
       img.src = src;
       img.className = "slide-img" + (idx === 0 ? " active" : "");
-      img.id = "slide-" + idx;
       slideFrame.appendChild(img);
 
       const segment = document.createElement("div");
@@ -256,11 +247,7 @@
     bgBlur.style.backgroundImage = `url('${images[0]}')`;
 
     function fireConfetti() {
-      confetti({
-        particleCount: 80,
-        spread: 70,
-        origin: { y: 0.6 }
-      });
+      confetti({ particleCount: 70, spread: 60, origin: { y: 0.6 } });
     }
 
     function showSlide(index) {
@@ -280,21 +267,25 @@
     }
 
     function startSurprise() {
-      // Hide Modal
       const modal = document.getElementById("giftModal");
       modal.style.opacity = "0";
       setTimeout(() => modal.style.visibility = "hidden", 800);
 
-      // Play "Rather Be"
-      bgMusic.currentTime = 64; // Start at the chorus drop!
-      bgMusic.play().catch(e => console.log("Audio waiting for user gesture:", e));
+      // Play audio cleanly
+      bgMusic.play().then(() => {
+        // Jump to drop if audio is long enough
+        setTimeout(() => {
+          try {
+            if (bgMusic.duration > 65) bgMusic.currentTime = 64;
+          } catch(e) {}
+        }, 200);
+      }).catch(err => {
+        console.warn("Playback error:", err);
+      });
 
-      // Fireworks Confetti
       fireConfetti();
       setTimeout(fireConfetti, 400);
-      setTimeout(fireConfetti, 800);
 
-      // Slideshow loop
       showSlide(0);
       setInterval(nextSlide, slideDuration);
     }
