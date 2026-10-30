@@ -628,21 +628,182 @@
     .thumb.active { transform: rotate(0) translateY(-6px) scale(1.08); background: var(--yellow); }
 
     /* ---------- CAKE ---------- */
-    .cake-scene {
-      display: flex;
-      align-items: flex-end;
-      justify-content: center;
-      gap: clamp(4px, 2vw, 24px);
-      margin-top: 10px;
+    /* The party scene: Sriram, Swathi, the cake, Lakshmi */
+    .party-stage {
+      position: relative;
+      width: min(1000px, 100%);
+      aspect-ratio: 16 / 10;
+      margin: 70px auto 46px;
     }
-    .cake-cat { width: clamp(64px, 16vw, 180px); flex-shrink: 0; margin-bottom: -4px; }
+    .person { position: absolute; bottom: 3%; z-index: 3; }
+    .person.sriram  { left: 0; width: 16%; }
+    .person.swathi  { left: 15%; width: 23%; bottom: 4%; z-index: 2; }
+    .person.lakshmi { right: 1%; width: 16%; }
+    .person-art svg {
+      display: block;
+      width: 100%;
+      height: auto;
+      overflow: visible;
+      transform-origin: 50% 100%;
+      transition: transform 0.5s ease;
+      animation: personBob 2.4s ease-in-out infinite;
+    }
+    .person.lakshmi .person-art svg { animation-delay: -0.8s; }
+    .person.swathi .person-art svg  { animation-delay: -1.6s; }
+    @keyframes personBob { 50% { transform: translateY(-3%); } }
+
+    .name-tag {
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      margin-top: 6px;
+      transform: translateX(-50%) rotate(-3deg);
+      background: #fff;
+      border: 3px solid var(--ink);
+      border-radius: 999px;
+      box-shadow: 0 3px 0 var(--ink);
+      padding: 2px 12px;
+      font-family: var(--font-bubble);
+      font-size: clamp(11px, 2.2vw, 20px);
+      white-space: nowrap;
+    }
+    .name-tag.star { background: var(--yellow); }
+
+    .arm  { transition: transform 0.35s ease; }
+    .arm-l { transform-origin: 32.5px 126px; }
+    .arm-r { transform-origin: 87.5px 126px; }
+    .head { transform-origin: 60px 104px; transition: transform 0.4s ease; }
+    .person .eyes { transform-origin: 60px 80px; animation: blink 4s infinite; }
+    .mouth-o { display: none; }
+
+    /* Clapping */
+    .clap .arm-l { animation: clapL 0.22s ease-in-out infinite alternate; }
+    .clap .arm-r { animation: clapR 0.22s ease-in-out infinite alternate; }
+    @keyframes clapL { from { transform: rotate(-58deg); } to { transform: rotate(-34deg); } }
+    @keyframes clapR { from { transform: rotate(58deg); } to { transform: rotate(34deg); } }
+
+    /* Cheering: arms up and jumping */
+    .cheer .arm-l { transform: rotate(150deg); }
+    .cheer .arm-r { transform: rotate(-150deg); }
+    .cheer .person-art svg { animation: jump 0.5s ease-in-out infinite; }
+    @keyframes jump { 50% { transform: translateY(-12%); } }
+
+    /* Swathi blowing the candles */
+    .blowing .person-art svg { animation: none; transform: rotate(8deg) translateX(10%); }
+    .blowing .head { transform: rotate(10deg); }
+    .blowing .mouth-smile { display: none; }
+    .blowing .mouth-o { display: inline; transform-origin: 62px 95px; animation: puff 0.3s ease-in-out infinite alternate; }
+    @keyframes puff { to { transform: scale(1.3); } }
+
+    /* Swathi reaching to cut */
+    .cutting .arm-r { transform: rotate(-75deg); }
+    .cutting .person-art svg { animation: none; transform: rotate(5deg) translateX(6%); }
+
+    .say {
+      position: absolute;
+      bottom: 102%;
+      left: 50%;
+      z-index: 10;
+      width: max-content;
+      max-width: clamp(110px, 24vw, 230px);
+      background: #fff;
+      border: 3px solid var(--ink);
+      border-radius: 16px;
+      box-shadow: 0 3px 0 var(--ink);
+      padding: 5px 10px;
+      font-family: var(--font-hand);
+      font-size: clamp(12px, 2.2vw, 19px);
+      line-height: 1.2;
+      text-align: center;
+      transform: translateX(-50%) scale(0);
+      transform-origin: 50% 100%;
+      transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .say.show { transform: translateX(-50%) scale(1); }
+    .sriram .say { left: 0; transform: scale(0); transform-origin: 0 100%; }
+    .sriram .say.show { transform: scale(1); }
+    .lakshmi .say { left: auto; right: 0; transform: scale(0); transform-origin: 100% 100%; }
+    .lakshmi .say.show { transform: scale(1); }
+
+    .wind {
+      position: absolute;
+      left: 30%;
+      bottom: 49%;
+      width: 15%;
+      z-index: 5;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+    .wind.show { opacity: 1; }
+    .wind path {
+      fill: none;
+      stroke: #8ec5ff;
+      stroke-width: 5;
+      stroke-linecap: round;
+      stroke-dasharray: 20 14;
+      animation: windFlow 0.5s linear infinite;
+    }
+    @keyframes windFlow { to { stroke-dashoffset: -34; } }
+
+    .knife {
+      position: absolute;
+      left: 60%;
+      top: 0;
+      width: 8%;
+      z-index: 6;
+      opacity: 0;
+      pointer-events: none;
+    }
+    .knife svg { display: block; width: 100%; height: auto; }
+    .knife.slicing { animation: knifeCut 1.8s ease-in-out forwards; }
+    @keyframes knifeCut {
+      0%   { opacity: 0; transform: translateY(-80%) rotate(-20deg); }
+      20%  { opacity: 1; transform: translateY(-60%) rotate(0); }
+      55%  { transform: translateY(70%); }
+      75%  { opacity: 1; transform: translateY(70%); }
+      100% { opacity: 0; transform: translateY(-60%); }
+    }
+    .cut {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      z-index: 4;
+      width: 3px;
+      background: var(--ink);
+      transform: scaleY(0);
+      transform-origin: top;
+      transition: transform 0.5s ease;
+    }
+    .cake-wrap.cut-done .cut { transform: scaleY(1); }
+    .tier-mid .cut { transition-delay: 0.2s; }
+    .tier-bot .cut { transition-delay: 0.4s; }
+
+    .slice {
+      position: absolute;
+      left: 58%;
+      bottom: 30%;
+      width: 10%;
+      z-index: 7;
+      opacity: 0;
+      transform: scale(0.5);
+      transition: left 0.9s cubic-bezier(0.34, 1.56, 0.64, 1), bottom 0.9s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.3s ease, transform 0.9s ease;
+    }
+    .slice svg { display: block; width: 100%; height: auto; }
+    .slice.served { left: 46%; bottom: -3%; opacity: 1; transform: scale(1) rotate(-6deg); }
+
+    .cake-cat { position: absolute; left: 73.5%; bottom: 0; width: 9%; z-index: 4; }
     .cake-cat .cat-hat { opacity: 0; transform: translateY(-30px); transition: opacity 0.4s ease, transform 0.4s ease; }
     .cake-cat.party .cat-hat { opacity: 1; transform: none; }
     .cake-cat.party svg { animation: catJump 0.6s ease-in-out 4; }
     @keyframes catJump { 50% { transform: translateY(-40px) rotate(-8deg); } }
 
     .cake-wrap {
-      width: min(580px, 68vw);
+      position: absolute;
+      left: 37%;
+      bottom: 4%;
+      width: 36%;
+      z-index: 3;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -655,7 +816,7 @@
       display: flex;
       justify-content: space-evenly;
       align-items: flex-end;
-      padding-top: 56px;
+      padding-top: clamp(26px, 5vw, 52px);
       margin-bottom: -4px;
     }
     .candle {
@@ -668,8 +829,9 @@
       outline: none;
     }
     .candle.small {
-      width: clamp(9px, 2.2vw, 15px);
-      height: clamp(42px, 10vw, 74px);
+      width: clamp(5px, 1.2vw, 12px);
+      height: clamp(24px, 6vw, 60px);
+      border-width: 2px;
       border: 3px solid var(--ink);
       border-radius: 6px 6px 2px 2px;
       background: repeating-linear-gradient(-45deg, #fff 0 5px, var(--stripe) 5px 10px);
@@ -677,9 +839,9 @@
     .candle.num .num-txt {
       display: block;
       font-family: var(--font-bubble);
-      font-size: clamp(56px, 13vw, 110px);
+      font-size: clamp(26px, 6.5vw, 84px);
       line-height: 0.8;
-      -webkit-text-stroke: 4px var(--ink);
+      -webkit-text-stroke: 3px var(--ink);
       paint-order: stroke fill;
       text-shadow: 0 5px 0 var(--ink);
     }
@@ -744,12 +906,12 @@
       z-index: 3;
       text-align: center;
       font-family: var(--font-hand);
-      font-size: clamp(22px, 5vw, 46px);
+      font-size: clamp(13px, 3.4vw, 40px);
       color: #fff;
       -webkit-text-stroke: 1.5px var(--ink);
       paint-order: stroke fill;
     }
-    .tier-text.small { font-size: clamp(14px, 3vw, 26px); }
+    .tier-text.small { font-size: clamp(9px, 2vw, 22px); }
     .plate {
       width: 104%;
       height: clamp(14px, 2.6vw, 24px);
@@ -798,7 +960,7 @@
     .quiz-note { font-family: var(--font-hand); font-size: clamp(19px, 2.4vw, 24px); color: var(--purple); margin-top: 8px; }
     .arena {
       position: relative;
-      height: clamp(220px, 30vw, 280px);
+      height: clamp(280px, 38vw, 360px);
       margin-top: 22px;
       display: flex;
       flex-wrap: wrap;
@@ -809,7 +971,21 @@
       border-radius: 24px;
     }
     #btnYes { font-size: clamp(18px, 2.4vw, 24px); transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1); z-index: 2; }
-    #btnNo  { transition: left 0.15s ease-out, top 0.15s ease-out, transform 0.15s ease; z-index: 3; }
+    #btnNo {
+      z-index: 3;
+      white-space: nowrap;
+      transition: left 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), top 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), transform 0.2s ease;
+    }
+    #btnNo.poof { animation: poof 0.6s ease-in forwards; pointer-events: none; }
+    @keyframes poof {
+      40%  { transform: scale(1.3) rotate(-10deg); opacity: 1; }
+      100% { transform: scale(0) rotate(200deg); opacity: 0; }
+    }
+    #btnYes.mega { animation: megaPulse 1s ease-in-out infinite; }
+    @keyframes megaPulse {
+      0%, 100% { transform: scale(var(--mega)); }
+      50%      { transform: scale(calc(var(--mega) * 1.06)) rotate(-2deg); }
+    }
     .taunt { font-family: var(--font-hand); font-size: clamp(19px, 2.4vw, 24px); color: var(--pink); min-height: 1.5em; margin-top: 14px; }
 
     .certificate {
@@ -1120,12 +1296,55 @@
       <div class="wrap">
         <div class="section-head reveal">
           <h2 class="section-title letterize">Make a Wish!</h2>
-          <p class="section-sub">tap each candle to blow it out, or blow them all at once 💨</p>
+          <p class="section-sub">press the big button and watch Swathi blow the candles & cut the cake 🎬</p>
         </div>
 
-        <div class="cake-scene reveal">
+        <div class="party-stage reveal" id="partyStage">
+          <div class="person sriram" id="pSriram">
+            <div class="say" id="saySriram"></div>
+            <div class="person-art" id="artSriram"></div>
+            <div class="name-tag">Sriram</div>
+          </div>
+          <div class="person swathi" id="pSwathi">
+            <div class="say" id="saySwathi"></div>
+            <div class="person-art" id="artSwathi"></div>
+            <div class="name-tag star">Swathi 👑</div>
+          </div>
+          <div class="person lakshmi" id="pLakshmi">
+            <div class="say" id="sayLakshmi"></div>
+            <div class="person-art" id="artLakshmi"></div>
+            <div class="name-tag">Lakshmi</div>
+          </div>
+
+          <svg class="wind" id="wind" viewBox="0 0 100 60" aria-hidden="true">
+            <path d="M5 20 Q50 5 95 20" /><path d="M5 32 Q50 32 95 32" /><path d="M5 44 Q50 58 95 44" />
+          </svg>
+
           <div class="cake-cat" id="cakeCat"></div>
-          <div class="cake-wrap">
+
+          <div class="slice" id="slice">
+            <svg viewBox="0 0 100 90" aria-hidden="true">
+              <ellipse cx="50" cy="78" rx="48" ry="10" fill="#e9ecf5" stroke="#3a2e5c" stroke-width="3.5" />
+              <rect x="14" y="34" width="72" height="10" fill="#f15bb5" />
+              <rect x="14" y="44" width="72" height="4" fill="#fff3e3" />
+              <rect x="14" y="48" width="72" height="10" fill="#9b5de5" />
+              <rect x="14" y="58" width="72" height="4" fill="#fff3e3" />
+              <rect x="14" y="62" width="72" height="10" fill="#ffd93d" />
+              <rect x="14" y="34" width="72" height="38" fill="none" stroke="#3a2e5c" stroke-width="3.5" />
+              <polygon points="14,34 86,34 66,18 32,18" fill="#ffffff" stroke="#3a2e5c" stroke-width="3.5" stroke-linejoin="round" />
+              <circle cx="49" cy="14" r="6" fill="#ff5a5f" stroke="#3a2e5c" stroke-width="3" />
+            </svg>
+          </div>
+
+          <div class="cake-wrap" id="cakeWrap">
+            <div class="knife" id="knife">
+              <svg viewBox="0 0 24 110" aria-hidden="true">
+                <rect x="6" y="0" width="12" height="34" rx="4" fill="#9b5de5" stroke="#3a2e5c" stroke-width="3" />
+                <rect x="2" y="32" width="20" height="6" rx="2" fill="#ffd93d" stroke="#3a2e5c" stroke-width="3" />
+                <path d="M5 38 H19 V92 L12 108 L5 92 Z" fill="#e9ecf5" stroke="#3a2e5c" stroke-width="3" stroke-linejoin="round" />
+                <path d="M9 44 V88" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" />
+              </svg>
+            </div>
             <div class="candles" id="candles"></div>
             <div class="tier tier-top" data-icing="#ffffff">
               <svg class="drip" viewBox="0 0 100 20" preserveAspectRatio="none" aria-hidden="true"></svg>
@@ -1147,8 +1366,8 @@
 
         <p class="cake-status" id="cakeStatus"></p>
         <div class="cake-actions">
-          <button class="btn btn-blue" onclick="blowAll()">Blow them all 💨</button>
-          <button class="btn btn-green" onclick="relight()">Relight 🔥</button>
+          <button class="btn btn-yellow" onclick="celebrate()">🎬 Blow the candles & cut the cake!</button>
+          <button class="btn btn-green" onclick="resetParty()">Relight 🔥</button>
         </div>
 
         <div class="wish-result paper-card" id="wishResult">
@@ -1689,6 +1908,12 @@
         blastConfetti();
         setTimeout(() => blastConfetti({ origin: { x: 0.2, y: 0.6 } }), 400);
         setTimeout(() => blastConfetti({ origin: { x: 0.8, y: 0.6 } }), 800);
+        // It's time! Jump to the cake and start the show
+        if (giftOpened) {
+          autoPartyDone = true;
+          $("cake").scrollIntoView({ behavior: "smooth" });
+          setTimeout(celebrate, 1500);
+        }
       }
       countdownCelebrated = true;
 
@@ -1730,6 +1955,12 @@
       tier.querySelector(".drip").innerHTML =
         `<path d="${d}" fill="${tier.dataset.icing}" stroke="${INK}" stroke-width="3" vector-effect="non-scaling-stroke"/>`;
 
+      // Hidden cut line, lined up with where the knife comes down
+      const cut = document.createElement("span");
+      cut.className = "cut";
+      cut.style.left = tier.classList.contains("tier-top") ? "77%" : tier.classList.contains("tier-mid") ? "69%" : "65%";
+      tier.appendChild(cut);
+
       const sprinkles = tier.querySelector(".sprinkles");
       for (let i = 0; i < 28; i++) {
         const sp = document.createElement("i");
@@ -1770,17 +2001,8 @@
       setTimeout(() => smoke.remove(), 1600);
       candlesLeft--;
       updateCakeStatus();
-      if (candlesLeft === 0) wishGranted();
-    }
-
-    function blowAll() {
-      [...candlesEl.children].forEach((c, i) => setTimeout(() => blowOne(c), i * 110));
-    }
-
-    function relight() {
-      $("wishResult").classList.remove("show");
-      $("cakeCat").classList.remove("party");
-      buildCandles();
+      // Blowing the last candle by hand goes straight to the cake cutting
+      if (candlesLeft === 0 && !partyRunning) cutCake();
     }
 
     function updateCakeStatus() {
@@ -1789,13 +2011,219 @@
         : "All candles out! 🎉";
     }
 
-    function wishGranted() {
+    // ================= PARTY PEOPLE =================
+    function personSVG({ style, outfit, outfit2, skin = "#c68a5b", hair = "#2b1d14" }) {
+      const st = `stroke="${INK}" stroke-width="3.5" stroke-linejoin="round"`;
+      const girl = style !== "boy";
+
+      const longHair = style === "swathi"
+        ? `<path d="M24 80 C 18 40, 40 34, 60 34 C 82 34, 104 42, 96 84 L 100 150 C 90 160, 30 160, 20 150 Z" fill="${hair}" ${st}/>`
+        : "";
+      const legs = girl
+        ? `<rect x="44" y="190" width="12" height="44" rx="5" fill="${skin}" ${st}/>
+           <rect x="64" y="190" width="12" height="44" rx="5" fill="${skin}" ${st}/>`
+        : `<rect x="43" y="186" width="15" height="48" rx="5" fill="${outfit2}" ${st}/>
+           <rect x="62" y="186" width="15" height="48" rx="5" fill="${outfit2}" ${st}/>`;
+      const shoes = `<ellipse cx="48" cy="236" rx="11" ry="6" fill="${INK}"/><ellipse cx="72" cy="236" rx="11" ry="6" fill="${INK}"/>`;
+      const body = girl
+        ? `<path d="M40 116 L80 116 L100 196 Q60 206 20 196 Z" fill="${outfit}" ${st}/>
+           <path d="M28 172 Q60 182 92 172" stroke="${outfit2}" stroke-width="6" fill="none"/>`
+        : `<rect x="36" y="114" width="48" height="76" rx="12" fill="${outfit}" ${st}/>
+           <path d="M60 116 V188" stroke="${outfit2}" stroke-width="3" stroke-dasharray="2 10" stroke-linecap="round"/>`;
+      const dressText = style === "swathi"
+        ? `<text x="60" y="160" text-anchor="middle" font-family="Chewy, cursive" font-size="22" fill="#fff" stroke="${INK}" stroke-width="1.2">21</text>`
+        : "";
+
+      // Sriram holds a balloon in his right hand
+      const balloon = style === "boy"
+        ? `<path d="M88 176 C 96 140, 120 110, 108 60" stroke="${INK}" stroke-width="1.5" fill="none"/>
+           <ellipse cx="108" cy="44" rx="13" ry="16" fill="#ff5a5f" ${st}/>
+           <path d="M104 36 q3 -5 7 -4" stroke="#fff" stroke-width="2.5" fill="none" stroke-linecap="round"/>`
+        : "";
+      const arm = (cls, x, extra = "") =>
+        `<g class="arm ${cls}">
+           <rect x="${x}" y="120" width="13" height="56" rx="6.5" fill="${skin}" ${st}/>
+           <rect x="${x}" y="118" width="13" height="20" rx="6" fill="${outfit}" ${st}/>
+           ${extra}
+         </g>`;
+
+      let headTop = "";
+      if (style === "boy") {
+        headTop = `<path d="M28 74 C 24 40, 48 32, 62 38 C 78 28, 98 44, 92 74 C 86 58, 76 52, 66 56 C 56 48, 40 56, 28 74 Z" fill="${hair}" ${st}/>`;
+      } else {
+        headTop = `<path d="M28 78 C 26 44, 50 38, 60 40 C 74 38, 96 46, 92 78 C 82 62, 70 56, 60 60 C 50 54, 36 62, 28 78 Z" fill="${hair}" ${st}/>`;
+      }
+      const bun = style === "lakshmi"
+        ? `<circle cx="60" cy="36" r="15" fill="${hair}" ${st}/><circle cx="75" cy="34" r="5" fill="#fff" ${st}/><circle cx="45" cy="34" r="5" fill="#fff" ${st}/>`
+        : "";
+      const tiara = style === "swathi"
+        ? `<path d="M42 46 L48 30 L54 40 L60 24 L66 40 L72 30 L78 46 Z" fill="#ffd93d" ${st}/><circle cx="60" cy="26" r="3.5" fill="#f15bb5"/>`
+        : "";
+
+      return `<svg viewBox="0 0 120 246" aria-hidden="true">
+        ${longHair}
+        ${legs}${shoes}
+        ${body}${dressText}
+        ${arm("arm-l", 26)}
+        ${arm("arm-r", 81, balloon)}
+        <rect x="54" y="102" width="12" height="18" fill="${skin}" ${st}/>
+        <g class="head">
+          ${bun}
+          <circle cx="29" cy="82" r="6" fill="${skin}" ${st}/>
+          <circle cx="91" cy="82" r="6" fill="${skin}" ${st}/>
+          <circle cx="60" cy="76" r="32" fill="${skin}" ${st}/>
+          ${headTop}
+          ${tiara}
+          <g class="eyes">
+            <ellipse cx="49" cy="80" rx="3.8" ry="4.8" fill="${INK}"/>
+            <ellipse cx="71" cy="80" rx="3.8" ry="4.8" fill="${INK}"/>
+            <circle cx="50.3" cy="78.3" r="1.4" fill="#fff"/>
+            <circle cx="72.3" cy="78.3" r="1.4" fill="#fff"/>
+          </g>
+          <circle cx="41" cy="90" r="5" fill="#ff8fab" opacity=".6"/>
+          <circle cx="79" cy="90" r="5" fill="#ff8fab" opacity=".6"/>
+          <path class="mouth-smile" d="M52 92 Q60 101 68 92" stroke="${INK}" stroke-width="3" fill="none" stroke-linecap="round"/>
+          <ellipse class="mouth-o" cx="62" cy="95" rx="4.5" ry="5.5" fill="${INK}"/>
+        </g>
+      </svg>`;
+    }
+
+    $("artSriram").innerHTML = personSVG({ style: "boy", outfit: "#4d96ff", outfit2: "#3a2e5c" });
+    $("artSwathi").innerHTML = personSVG({ style: "swathi", outfit: "#f15bb5", outfit2: "#ffd93d" });
+    $("artLakshmi").innerHTML = personSVG({ style: "lakshmi", outfit: "#00bbf9", outfit2: "#ffd93d" });
+
+    const pSriram = $("pSriram");
+    const pSwathi = $("pSwathi");
+    const pLakshmi = $("pLakshmi");
+    const knife = $("knife");
+    const cakeWrap = $("cakeWrap");
+    const slice = $("slice");
+    const SAY_IDS = ["saySriram", "saySwathi", "sayLakshmi"];
+    const sleep = ms => new Promise(r => setTimeout(r, ms));
+    let partyRunning = false;
+    let partyDone = false;
+
+    function say(id, text, ms = 2200) {
+      const el = $(id);
+      el.textContent = text;
+      el.classList.add("show");
+      clearTimeout(el.hideTimer);
+      el.hideTimer = setTimeout(() => el.classList.remove("show"), ms);
+    }
+
+    function hush() {
+      SAY_IDS.forEach(id => {
+        const el = $(id);
+        clearTimeout(el.hideTimer);
+        el.classList.remove("show");
+      });
+    }
+
+    function resetParty() {
+      if (partyRunning) return;
+      hush();
+      [pSriram, pSwathi, pLakshmi].forEach(p => p.classList.remove("clap", "cheer", "blowing", "cutting"));
+      $("wind").classList.remove("show");
+      knife.classList.remove("slicing");
+      cakeWrap.classList.remove("cut-done");
+      slice.classList.remove("served");
+      $("wishResult").classList.remove("show");
+      $("cakeCat").classList.remove("party");
+      buildCandles();
+      partyDone = false;
+    }
+
+    // The full show: friends cheer, Swathi blows the candles, then cuts the cake
+    async function celebrate() {
+      if (partyRunning) return;
+      if (partyDone || candlesLeft < CANDLES.length) {
+        resetParty();
+        await sleep(700);
+      }
+      partyRunning = true;
+
+      pSriram.classList.add("clap");
+      pLakshmi.classList.add("clap");
+      say("saySriram", "Ready, Swathi? 🎉", 2000);
+      await sleep(1500);
+      say("sayLakshmi", "Make a wish first! 💖", 2000);
+      await sleep(1700);
+      say("saySwathi", "Okay... wish made ✨", 1800);
+      await sleep(1800);
+      pSriram.classList.remove("clap");
+      pLakshmi.classList.remove("clap");
+
+      pSwathi.classList.add("blowing");
+      $("wind").classList.add("show");
+      await sleep(600);
+      for (const c of [...candlesEl.children]) {
+        blowOne(c);
+        await sleep(170);
+      }
+      await sleep(500);
+      pSwathi.classList.remove("blowing");
+      $("wind").classList.remove("show");
+
+      await cutCake();
+    }
+
+    async function cutCake() {
+      partyRunning = true;
+
+      pSriram.classList.add("cheer");
+      pLakshmi.classList.add("cheer");
+      say("saySriram", "Yaaay! 🥳", 1500);
+      say("sayLakshmi", "Woohoo! 🎊", 1500);
+      blastConfetti();
+      await sleep(1700);
+      pSriram.classList.remove("cheer");
+      pLakshmi.classList.remove("cheer");
+
+      say("saySwathi", "Time to cut the cake! 🔪🎂", 2400);
+      pSwathi.classList.add("cutting");
+      await sleep(700);
+      knife.classList.remove("slicing");
+      void knife.offsetWidth;
+      knife.classList.add("slicing");
+      await sleep(800);
+      cakeWrap.classList.add("cut-done");
+      await sleep(1100);
+      pSwathi.classList.remove("cutting");
+
+      slice.classList.add("served");
+      pSriram.classList.add("cheer");
+      pLakshmi.classList.add("cheer");
+      say("saySriram", "Happy Birthday Swathi!! 🎂", 3500);
+      say("sayLakshmi", "Happy 21st! 💖", 3500);
+      await sleep(900);
+      say("saySwathi", "Thank you!! 🥹💖", 3000);
       $("wishResult").classList.add("show");
       $("cakeCat").classList.add("party");
       blastConfetti();
       setTimeout(() => blastConfetti({ origin: { x: 0.2, y: 0.6 } }), 300);
       setTimeout(() => blastConfetti({ origin: { x: 0.8, y: 0.6 } }), 600);
+      await sleep(3200);
+      pSriram.classList.remove("cheer");
+      pLakshmi.classList.remove("cheer");
+
+      partyDone = true;
+      partyRunning = false;
     }
+
+    function isBirthdayToday() {
+      const n = new Date();
+      return n.getMonth() === birth.getMonth() && n.getDate() === birth.getDate();
+    }
+
+    // On her birthday, the show plays by itself the first time she scrolls to the cake
+    let autoPartyDone = false;
+    new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting || autoPartyDone || !giftOpened || !isBirthdayToday()) return;
+        autoPartyDone = true;
+        setTimeout(celebrate, 800);
+      });
+    }, { threshold: 0.5 }).observe($("partyStage"));
 
     buildCandles();
 
@@ -1805,9 +2233,16 @@
     const arenaBox = $("arenaBox");
     const tauntText = $("tauntText");
 
-    const MAX_YES_SCALE = 1.6;
-    let yesScale = 1.0;
+    const NO_TEXTS = [
+      "NO 👎", "Are you sure? 🤨", "Really?? 😳", "Think again! 🤔", "Wrong button 🙈",
+      "Last chance... 😬", "pls 🥺", "I'm shrinking!! 😱", "ok fine... 😭", "bye bye 👋"
+    ];
+    const NO_VANISH_AT = NO_TEXTS.length;   // after this many escapes, No gives up and disappears
     let dodgeCount = 0;
+    let lastDodge = 0;
+    let noGone = false;
+    let wanderTimer = null;
+    let pointer = { x: -9999, y: -9999 };
     const taunts = [
       "Nice try! The 'No' button is slippery! 😜",
       "Error 404: 'No' does not exist in this universe!",
@@ -1818,23 +2253,89 @@
       "Resistance is futile! Press YES! ✨"
     ];
 
+    // Biggest the Yes button can get while still fitting inside the arena
+    function maxYesScale() {
+      return Math.max(1, Math.min(
+        (arenaBox.clientWidth * 0.92) / btnYes.offsetWidth,
+        (arenaBox.clientHeight * 0.8) / btnYes.offsetHeight
+      ));
+    }
+
+    // Jump to the spot farthest from the pointer that doesn't sit on top of Yes
+    function moveNo() {
+      const arena = arenaBox.getBoundingClientRect();
+      const yes = btnYes.getBoundingClientRect();
+      const w = btnNo.offsetWidth, h = btnNo.offsetHeight;
+      const maxX = Math.max(6, arena.width - w - 6);
+      const maxY = Math.max(6, arena.height - h - 6);
+      let best = null, bestScore = -Infinity;
+
+      for (let i = 0; i < 16; i++) {
+        const x = rand(6, maxX), y = rand(6, maxY);
+        const cx = arena.left + x + w / 2, cy = arena.top + y + h / 2;
+        const overlapsYes = cx + w / 2 > yes.left - 10 && cx - w / 2 < yes.right + 10 &&
+                            cy + h / 2 > yes.top - 10 && cy - h / 2 < yes.bottom + 10;
+        const score = Math.hypot(cx - pointer.x, cy - pointer.y) - (overlapsYes ? 10000 : 0);
+        if (score > bestScore) { bestScore = score; best = { x, y }; }
+      }
+      btnNo.style.left = best.x + "px";
+      btnNo.style.top = best.y + "px";
+    }
+
     function dodgeNo(e) {
       // On touch screens, stop the tap from turning into a real click
-      if (e && e.type === "touchstart") e.preventDefault();
+      if (e && e.type === "touchstart") {
+        e.preventDefault();
+        pointer = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+      }
+      if (noGone) return;
+      const now = performance.now();
+      if (now - lastDodge < 220) return;
+      lastDodge = now;
 
       dodgeCount++;
       btnNo.style.position = "absolute";
-      const maxX = Math.max(6, arenaBox.clientWidth - btnNo.offsetWidth - 6);
-      const maxY = Math.max(6, arenaBox.clientHeight - btnNo.offsetHeight - 6);
-      btnNo.style.left = Math.max(6, Math.random() * maxX) + "px";
-      btnNo.style.top = Math.max(6, Math.random() * maxY) + "px";
+      moveNo();
 
-      yesScale = Math.min(MAX_YES_SCALE, yesScale + 0.1);
+      // Yes grows a lot with every escape
+      const yesScale = Math.min(maxYesScale(), 1 + dodgeCount * 0.22);
       btnYes.style.transform = `scale(${yesScale})`;
+
+      // No gets more desperate, then starts shrinking
+      btnNo.textContent = NO_TEXTS[Math.min(dodgeCount, NO_TEXTS.length - 1)];
+      const shrink = dodgeCount > 5 ? Math.max(0.45, 1 - (dodgeCount - 5) * 0.13) : 1;
+      btnNo.style.transform = `scale(${shrink}) rotate(${rand(-15, 15).toFixed(0)}deg)`;
       tauntText.textContent = taunts[dodgeCount % taunts.length];
+
+      // After the first escape, No keeps wandering around on its own
+      if (!wanderTimer) wanderTimer = setInterval(() => { if (!noGone) moveNo(); }, 850);
+
+      if (dodgeCount >= NO_VANISH_AT) vanishNo();
     }
 
+    function vanishNo() {
+      noGone = true;
+      clearInterval(wanderTimer);
+      btnNo.classList.add("poof");
+      setTimeout(() => { btnNo.style.display = "none"; }, 600);
+      tauntText.textContent = "The 'No' button has left the chat 💨 Only one answer left!";
+      btnYes.style.transform = "";
+      btnYes.style.setProperty("--mega", maxYesScale().toFixed(2));
+      btnYes.classList.add("mega");
+    }
+
+    // Run away when the mouse just gets close, not only when it touches
+    arenaBox.addEventListener("mousemove", e => {
+      pointer = { x: e.clientX, y: e.clientY };
+      if (noGone || btnNo.style.display === "none") return;
+      const r = btnNo.getBoundingClientRect();
+      const dist = Math.hypot(e.clientX - (r.left + r.width / 2), e.clientY - (r.top + r.height / 2));
+      if (dist < 110) dodgeNo();
+    });
+
     function acceptTruth() {
+      clearInterval(wanderTimer);
+      noGone = true;
       btnNo.style.display = "none";
       tauntText.textContent = "Correct answer! 🎉 The cat is very proud of you.";
       $("certificate").classList.add("show");
