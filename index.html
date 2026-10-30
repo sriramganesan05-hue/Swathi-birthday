@@ -3,206 +3,372 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>Happy Birthday Swathi! ✨</title>
+  <title>Happy Birthday Swathi ✨</title>
   
-  <!-- Confetti library -->
+  <!-- Fonts & Confetti -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,800;1,400&family=Plus+Jakarta+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-  
+
   <style>
+    :root {
+      --primary: #ffd700;
+      --accent: #ff4d88;
+      --glass: rgba(255, 255, 255, 0.08);
+      --glass-border: rgba(255, 255, 255, 0.18);
+    }
+
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
     }
 
     body {
-      background: #0d0c1d;
+      background: #06050b;
       color: #fff;
+      font-family: 'Plus Jakarta Sans', sans-serif;
       overflow: hidden;
       height: 100vh;
+      width: 100vw;
       display: flex;
       justify-content: center;
       align-items: center;
     }
 
-    /* Blur background layer */
-    .bg-blur {
+    /* Ambient dynamic blur layer */
+    #ambientBg {
       position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
+      inset: -20px;
       background-size: cover;
       background-position: center;
-      filter: blur(40px) brightness(0.4);
-      transform: scale(1.1);
-      transition: background-image 1s ease-in-out;
+      filter: blur(60px) brightness(0.35) saturate(1.4);
+      transform: scale(1.15);
+      transition: background-image 1.2s cubic-bezier(0.4, 0, 0.2, 1);
       z-index: 1;
     }
 
-    /* Main Container */
-    .viewer {
-      position: relative;
+    /* Floating Stardust Canvas */
+    #particleCanvas {
+      position: absolute;
+      inset: 0;
       z-index: 2;
+      pointer-events: none;
+    }
+
+    /* Main Showcase Stage */
+    .experience-container {
+      position: relative;
+      z-index: 10;
       width: 100%;
       max-width: 440px;
-      height: 92vh;
-      max-height: 840px;
-      border-radius: 28px;
-      overflow: hidden;
-      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.7);
-      background: #111;
+      height: 94vh;
+      max-height: 850px;
+      border-radius: 36px;
+      background: rgba(18, 14, 28, 0.65);
+      backdrop-filter: blur(25px);
+      -webkit-backdrop-filter: blur(25px);
+      border: 1px solid var(--glass-border);
+      box-shadow: 0 30px 90px rgba(0, 0, 0, 0.8), 0 0 50px rgba(255, 77, 136, 0.15);
       display: flex;
       flex-direction: column;
-    }
-
-    .slide-frame {
-      position: relative;
-      flex: 1;
       overflow: hidden;
-      background: #000;
     }
 
-    .slide-img {
+    /* Top Story Bar */
+    .story-progress {
       position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      opacity: 0;
-      transform: scale(1);
-      transition: opacity 0.8s ease-in-out, transform 4s ease-out;
-    }
-
-    .slide-img.active {
-      opacity: 1;
-      transform: scale(1.08);
-    }
-
-    .overlay-content {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      padding: 30px 20px 25px;
-      background: linear-gradient(transparent, rgba(0, 0, 0, 0.85) 40%, rgba(0, 0, 0, 0.95));
-      text-align: center;
-      z-index: 5;
-    }
-
-    .title {
-      font-size: 26px;
-      font-weight: 800;
-      color: #fff;
-      text-shadow: 0 2px 10px rgba(0,0,0,0.6);
-      margin-bottom: 6px;
-    }
-
-    .subtitle {
-      font-size: 16px;
-      font-weight: 500;
-      color: #ffd700;
-      letter-spacing: 0.5px;
-      text-shadow: 0 1px 5px rgba(0,0,0,0.5);
-    }
-
-    .progress-bar {
-      position: absolute;
-      top: 15px;
-      left: 15px;
-      right: 15px;
+      top: 16px;
+      left: 18px;
+      right: 18px;
       display: flex;
-      gap: 4px;
-      z-index: 10;
+      gap: 5px;
+      z-index: 30;
     }
 
     .bar-segment {
       flex: 1;
-      height: 3px;
-      background: rgba(255, 255, 255, 0.3);
-      border-radius: 2px;
+      height: 3.5px;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 4px;
       overflow: hidden;
     }
 
     .bar-fill {
       height: 100%;
       width: 0%;
-      background: #ffd700;
-      transition: width 0.1s linear;
+      background: linear-gradient(90deg, #ffd700, #ff4d88);
+      border-radius: 4px;
     }
 
-    /* Start / Reveal Screen */
-    .gift-modal {
-      position: fixed;
-      top: 0;
-      left: 0;
+    /* Equalizer Sound Button */
+    .sound-chip {
+      position: absolute;
+      top: 32px;
+      right: 20px;
+      z-index: 35;
+      background: rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(10px);
+      border: 1px solid var(--glass-border);
+      padding: 8px 14px;
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      transition: transform 0.2s ease;
+    }
+
+    .sound-chip:active {
+      transform: scale(0.92);
+    }
+
+    .eq-bars {
+      display: flex;
+      align-items: flex-end;
+      gap: 2.5px;
+      height: 14px;
+    }
+
+    .eq-bar {
+      width: 2.5px;
+      background: var(--primary);
+      border-radius: 2px;
+      animation: bounceEq 1s ease-in-out infinite alternate;
+    }
+    .eq-bar:nth-child(1) { height: 40%; animation-delay: 0.1s; }
+    .eq-bar:nth-child(2) { height: 90%; animation-delay: 0.3s; }
+    .eq-bar:nth-child(3) { height: 60%; animation-delay: 0.2s; }
+
+    @keyframes bounceEq {
+      0% { height: 20%; }
+      100% { height: 100%; }
+    }
+
+    .paused .eq-bar {
+      animation: none !important;
+      height: 30% !important;
+    }
+
+    /* Image Display Area */
+    .photo-stage {
+      position: relative;
+      flex: 1;
+      width: 100%;
+      overflow: hidden;
+      cursor: pointer;
+    }
+
+    .photo-slide {
+      position: absolute;
+      inset: 0;
       width: 100%;
       height: 100%;
-      background: radial-gradient(circle, #2a1b40 0%, #0c0814 100%);
+      object-fit: cover;
+      opacity: 0;
+      transform: scale(1.06);
+      transition: opacity 0.9s cubic-bezier(0.4, 0, 0.2, 1), transform 5s ease-out;
+      pointer-events: none;
+    }
+
+    .photo-slide.active {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    /* Tap zones for story next/prev */
+    .nav-zone {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 35%;
+      z-index: 25;
+    }
+    .nav-left { left: 0; }
+    .nav-right { right: 0; }
+
+    /* Bottom Floating Love Note */
+    .card-footer {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 50px 24px 30px;
+      background: linear-gradient(to top, rgba(10, 7, 18, 0.96) 20%, rgba(10, 7, 18, 0.6) 70%, transparent);
+      z-index: 30;
+      text-align: center;
+      pointer-events: none;
+    }
+
+    .title-banner {
+      font-family: 'Playfair Display', serif;
+      font-size: 27px;
+      font-weight: 700;
+      background: linear-gradient(120deg, #fff 30%, #ffd700 80%, #ff8fb3);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 6px;
+      letter-spacing: -0.3px;
+    }
+
+    .quote-box {
+      font-size: 14.5px;
+      color: rgba(255, 255, 255, 0.85);
+      font-weight: 400;
+      min-height: 24px;
+      transition: opacity 0.4s ease;
+    }
+
+    .quote-box span {
+      color: var(--primary);
+      font-weight: 600;
+    }
+
+    /* Tap Floating Heart Particles */
+    .floating-heart {
+      position: fixed;
+      font-size: 26px;
+      pointer-events: none;
+      z-index: 999;
+      animation: floatUp 1.2s forwards cubic-bezier(0.1, 0.8, 0.3, 1);
+    }
+
+    @keyframes floatUp {
+      0% { opacity: 1; transform: translate(-50%, -50%) scale(0.6) rotate(0deg); }
+      100% { opacity: 0; transform: translate(-50%, -160px) scale(1.4) rotate(20deg); }
+    }
+
+    /* Unboxing Reveal Ceremony Modal */
+    #revealModal {
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(circle at center, #241638 0%, #06040b 100%);
+      z-index: 1000;
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      z-index: 999;
-      cursor: pointer;
+      text-align: center;
+      padding: 24px;
       transition: opacity 0.8s ease, visibility 0.8s;
     }
 
-    .gift-box {
-      font-size: 90px;
-      animation: bounce 1.4s infinite alternate ease-in-out;
-      margin-bottom: 20px;
+    .box-wrapper {
+      position: relative;
+      cursor: pointer;
+      margin-bottom: 30px;
     }
 
-    .tap-text {
-      font-size: 20px;
+    .gift-ico {
+      font-size: 96px;
+      display: inline-block;
+      animation: boxWobble 2s ease-in-out infinite;
+      filter: drop-shadow(0 15px 35px rgba(255, 77, 136, 0.4));
+    }
+
+    @keyframes boxWobble {
+      0%, 100% { transform: translateY(0) rotate(0deg) scale(1); }
+      25% { transform: translateY(-12px) rotate(-6deg) scale(1.05); }
+      75% { transform: translateY(-6px) rotate(6deg) scale(1.05); }
+    }
+
+    .glow-aura {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 140px;
+      height: 140px;
+      background: radial-gradient(circle, rgba(255, 215, 0, 0.45) 0%, transparent 70%);
+      transform: translate(-50%, -50%);
+      z-index: -1;
+      animation: auraPulse 2s infinite alternate;
+    }
+
+    @keyframes auraPulse {
+      0% { transform: translate(-50%, -50%) scale(0.8); opacity: 0.5; }
+      100% { transform: translate(-50%, -50%) scale(1.3); opacity: 1; }
+    }
+
+    .open-btn {
+      background: linear-gradient(135deg, #ffd700, #ff4d88);
+      color: #0b0813;
       font-weight: 700;
-      color: #fff;
-      background: rgba(255, 255, 255, 0.1);
-      padding: 12px 28px;
-      border-radius: 30px;
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      box-shadow: 0 0 25px rgba(255, 215, 0, 0.4);
+      font-size: 17px;
+      padding: 16px 36px;
+      border-radius: 50px;
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 10px 30px rgba(255, 77, 136, 0.4);
+      transition: transform 0.2s ease, box-shadow 0.2s;
     }
 
-    @keyframes bounce {
-      from { transform: translateY(0px) scale(1); }
-      to { transform: translateY(-18px) scale(1.08); }
+    .open-btn:hover {
+      transform: scale(1.04);
+      box-shadow: 0 14px 40px rgba(255, 215, 0, 0.5);
     }
   </style>
 </head>
-<body>
+<body onclick="spawnHeart(event)">
 
-  <div class="bg-blur" id="bgBlur"></div>
+  <!-- Blurred Background Glow -->
+  <div id="ambientBg"></div>
 
-  <!-- Opening Reveal Screen -->
-  <div class="gift-modal" id="giftModal" onclick="startSurprise()">
-    <div class="gift-box">🎁</div>
-    <div class="tap-text">Tap to Open Your Birthday Surprise ✨</div>
+  <!-- Ambient Golden Stardust particles -->
+  <canvas id="particleCanvas"></canvas>
+
+  <!-- Reveal Overlay -->
+  <div id="revealModal">
+    <div class="box-wrapper" onclick="startExperience()">
+      <div class="glow-aura"></div>
+      <div class="gift-ico">🎁</div>
+    </div>
+    <h2 style="font-family:'Playfair Display', serif; font-size: 32px; margin-bottom: 12px; color: #fff;">For Swathi</h2>
+    <p style="color: rgba(255,255,255,0.7); font-size: 15px; margin-bottom: 26px;">A little musical birthday surprise made just for you ✨</p>
+    <button class="open-btn" onclick="startExperience()">Tap to Unwrap Gift</button>
   </div>
 
-  <!-- Main View -->
-  <div class="viewer">
-    <div class="progress-bar" id="progressBar"></div>
+  <!-- Main Reel Card -->
+  <div class="experience-container">
+    <!-- Instagram Story Progress -->
+    <div class="story-progress" id="progressBar"></div>
 
-    <div class="slide-frame" id="slideFrame"></div>
+    <!-- Live Music Chip -->
+    <div class="sound-chip" id="soundChip" onclick="toggleAudio(event)">
+      <div class="eq-bars">
+        <div class="eq-bar"></div>
+        <div class="eq-bar"></div>
+        <div class="eq-bar"></div>
+      </div>
+      <span style="font-size: 12px; font-weight: 600; color: #fff;">Rather Be</span>
+    </div>
 
-    <div class="overlay-content">
-      <h1 class="title">Happy Birthday Swathi! 🌸</h1>
-      <p class="subtitle">"No place I'd rather be ❤️"</p>
+    <!-- Clickable Navigation Zones -->
+    <div class="nav-zone nav-left" onclick="prevSlide(event)"></div>
+    <div class="nav-zone nav-right" onclick="nextSlide(event)"></div>
+
+    <!-- Photo Display -->
+    <div class="photo-stage" id="stage"></div>
+
+    <!-- Captions -->
+    <div class="card-footer">
+      <h1 class="title-banner">Happy Birthday Swathi 🌸</h1>
+      <div class="quote-box" id="quoteBox">When I am with you, there's no place I'd rather be ❤️</div>
     </div>
   </div>
 
-  <!-- Audio Player with your exact song filename -->
-  <audio id="bgMusic" preload="auto">
+  <!-- Audio Element with comprehensive fallbacks -->
+  <audio id="player" preload="auto" loop playsinline>
     <source src="Clean Bandit - Rather Be (Lyrics) feat. Jess Glynne.mp3" type="audio/mpeg">
     <source src="Clean%20Bandit%20-%20Rather%20Be%20(Lyrics)%20feat.%20Jess%20Glynne.mp3" type="audio/mpeg">
+    <source src="song.mp3" type="audio/mpeg">
   </audio>
 
   <script>
-    const images = [
+    // YOUR 19 PHOTOS
+    const photos = [
       "IMG-20260920-WA0007.jpg",
       "IMG-20260920-WA0002.jpg",
       "IMG-20260916-WA0016.jpg",
@@ -224,71 +390,201 @@
       "IMG-20260902-WA0018.jpg"
     ];
 
-    const slideFrame = document.getElementById("slideFrame");
-    const bgBlur = document.getElementById("bgBlur");
+    // Cinematic captions cycling through the photos
+    const captions = [
+      "Happy Birthday to the sweetest soul ✨",
+      "We're a thousand miles from comfort...",
+      "We have traveled land and sea 🌊",
+      "As long as you are with me...",
+      "There's no place I'd rather be ❤️",
+      "Celebrating your beautiful presence today 🌸",
+      "Your smile lights up every room 💫",
+      "Exalted in the scene...",
+      "As long as I am with you ✨",
+      "My heart continues to beat 💖",
+      "With every step we take...",
+      "Strolling so casually 🌿",
+      "Switch up the batteries ⚡",
+      "If you gave me a chance, I would take it 🎶",
+      "It's a shot in the dark, but I'll make it 🎯",
+      "Know with all of your heart, you can't shake me!",
+      "When I am with you...",
+      "No place I'd rather be! 🥂",
+      "Wishing you the most magical year ahead, Swathi! 🎂✨"
+    ];
+
+    const stage = document.getElementById("stage");
+    const ambientBg = document.getElementById("ambientBg");
     const progressBar = document.getElementById("progressBar");
-    const bgMusic = document.getElementById("bgMusic");
+    const quoteBox = document.getElementById("quoteBox");
+    const player = document.getElementById("player");
+    const soundChip = document.getElementById("soundChip");
 
     let currentIndex = 0;
-    const slideDuration = 2200;
+    let timer = null;
+    const DURATION = 3200; // 3.2s per photo for a relaxed cinematic pace
 
-    images.forEach((src, idx) => {
+    // Build DOM for images & progress bars
+    photos.forEach((src, idx) => {
       const img = document.createElement("img");
       img.src = src;
-      img.className = "slide-img" + (idx === 0 ? " active" : "");
-      slideFrame.appendChild(img);
+      img.className = "photo-slide" + (idx === 0 ? " active" : "");
+      img.id = "slide-" + idx;
+      stage.appendChild(img);
 
-      const segment = document.createElement("div");
-      segment.className = "bar-segment";
-      segment.innerHTML = '<div class="bar-fill" id="fill-' + idx + '"></div>';
-      progressBar.appendChild(segment);
+      const seg = document.createElement("div");
+      seg.className = "bar-segment";
+      seg.innerHTML = `<div class="bar-fill" id="fill-${idx}"></div>`;
+      progressBar.appendChild(seg);
     });
 
-    bgBlur.style.backgroundImage = `url('${images[0]}')`;
+    ambientBg.style.backgroundImage = `url('${photos[0]}')`;
 
-    function fireConfetti() {
-      confetti({ particleCount: 70, spread: 60, origin: { y: 0.6 } });
-    }
-
-    function showSlide(index) {
-      document.querySelectorAll(".slide-img").forEach((el, i) => {
-        el.classList.toggle("active", i === index);
+    function updateSlide(newIdx) {
+      document.querySelectorAll(".photo-slide").forEach((el, i) => {
+        el.classList.toggle("active", i === newIdx);
       });
+
       document.querySelectorAll(".bar-fill").forEach((el, i) => {
-        el.style.width = i <= index ? "100%" : "0%";
+        el.style.width = i <= newIdx ? "100%" : "0%";
       });
-      bgBlur.style.backgroundImage = `url('${images[index]}')`;
+
+      ambientBg.style.backgroundImage = `url('${photos[newIdx]}')`;
+
+      // Update caption with fade
+      quoteBox.style.opacity = 0;
+      setTimeout(() => {
+        quoteBox.innerHTML = captions[newIdx] || "No place I'd rather be ❤️";
+        quoteBox.style.opacity = 1;
+      }, 250);
+
+      currentIndex = newIdx;
     }
 
-    function nextSlide() {
-      currentIndex = (currentIndex + 1) % images.length;
-      showSlide(currentIndex);
-      if (currentIndex % 3 === 0) fireConfetti();
+    function nextSlide(e) {
+      if (e) e.stopPropagation();
+      clearInterval(timer);
+      const next = (currentIndex + 1) % photos.length;
+      updateSlide(next);
+      if (next % 4 === 0) blastConfetti();
+      startAutoPlay();
     }
 
-    function startSurprise() {
-      const modal = document.getElementById("giftModal");
+    function prevSlide(e) {
+      if (e) e.stopPropagation();
+      clearInterval(timer);
+      const prev = (currentIndex - 1 + photos.length) % photos.length;
+      updateSlide(prev);
+      startAutoPlay();
+    }
+
+    function startAutoPlay() {
+      clearInterval(timer);
+      timer = setInterval(() => {
+        nextSlide();
+      }, DURATION);
+    }
+
+    function blastConfetti() {
+      confetti({
+        particleCount: 65,
+        spread: 80,
+        origin: { y: 0.65 },
+        colors: ['#ffd700', '#ff4d88', '#ffffff', '#a855f7']
+      });
+    }
+
+    function spawnHeart(e) {
+      const heart = document.createElement('div');
+      heart.className = 'floating-heart';
+      const symbols = ['💖', '✨', '🌸', '💫', '💛'];
+      heart.innerText = symbols[Math.floor(Math.random() * symbols.length)];
+      heart.style.left = e.clientX + 'px';
+      heart.style.top = e.clientY + 'px';
+      document.body.appendChild(heart);
+      setTimeout(() => heart.remove(), 1200);
+    }
+
+    function toggleAudio(e) {
+      if (e) e.stopPropagation();
+      if (player.paused) {
+        player.play();
+        soundChip.classList.remove('paused');
+      } else {
+        player.pause();
+        soundChip.classList.add('paused');
+      }
+    }
+
+    function startExperience() {
+      const modal = document.getElementById("revealModal");
       modal.style.opacity = "0";
       setTimeout(() => modal.style.visibility = "hidden", 800);
 
-      // Play audio cleanly
-      bgMusic.play().then(() => {
-        // Jump to drop if audio is long enough
-        setTimeout(() => {
-          try {
-            if (bgMusic.duration > 65) bgMusic.currentTime = 64;
-          } catch(e) {}
-        }, 200);
-      }).catch(err => {
-        console.warn("Playback error:", err);
-      });
+      // Play audio cleanly inside the touch gesture
+      player.volume = 1.0;
+      const playPromise = player.play();
+      if (playPromise !== undefined) {
+        playPromise.then(() => {
+          soundChip.classList.remove('paused');
+        }).catch(err => {
+          console.warn("Audio waiting for secondary tap:", err);
+          soundChip.classList.add('paused');
+        });
+      }
 
-      fireConfetti();
-      setTimeout(fireConfetti, 400);
+      // Grand celebration burst
+      blastConfetti();
+      setTimeout(blastConfetti, 450);
+      setTimeout(blastConfetti, 900);
 
-      showSlide(0);
-      setInterval(nextSlide, slideDuration);
+      updateSlide(0);
+      startAutoPlay();
     }
+
+    // Ambient Stardust Canvas
+    const canvas = document.getElementById('particleCanvas');
+    const ctx = canvas.getContext('2d');
+    let particles = [];
+
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+
+    class Particle {
+      constructor() {
+        this.reset();
+      }
+      reset() {
+        this.x = Math.random() * canvas.width;
+        this.y = Math.random() * canvas.height;
+        this.size = Math.random() * 2 + 0.6;
+        this.speedY = -(Math.random() * 0.5 + 0.2);
+        this.opacity = Math.random() * 0.7 + 0.3;
+      }
+      update() {
+        this.y += this.speedY;
+        if (this.y < 0) this.y = canvas.height;
+      }
+      draw() {
+        ctx.fillStyle = `rgba(255, 215, 0, ${this.opacity})`;
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    }
+
+    for (let i = 0; i < 40; i++) particles.push(new Particle());
+
+    function animateParticles() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      particles.forEach(p => { p.update(); p.draw(); });
+      requestAnimationFrame(animateParticles);
+    }
+    animateParticles();
   </script>
 </body>
 </html>
