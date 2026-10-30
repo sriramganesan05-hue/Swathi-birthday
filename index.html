@@ -3,478 +3,1217 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Swathi's 21st Birthday Celebration ✨</title>
+  <title>Swathi's 21st Birthday 🎨🐱</title>
 
+  <!-- Crayon + bubbly fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Bodoni+Moda:ital,opsz,wght@0,6..96,600;0,6..96,800;1,6..96,500&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cabin+Sketch:wght@700&family=Chewy&family=Fredoka:wght@400;500;600;700&family=Gochi+Hand&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
   <style>
     :root {
-      --gold: #ffd700;
-      --gold-glow: rgba(255, 215, 0, 0.45);
-      --pink: #ff8fb3;
-      --bg-dark: #090611;
-      --glass-panel: rgba(20, 15, 32, 0.72);
-      --glass-border: rgba(255, 215, 0, 0.22);
-      --muted: rgba(255, 255, 255, 0.68);
+      --ink: #3a2e5c;
+      --paper: #fff8ec;
 
-      --font-body: 'Outfit', sans-serif;
-      --font-serif: 'Bodoni Moda', serif;
-      --font-script: 'Alex Brush', cursive;
+      --red: #ff5a5f;
+      --orange: #ffa630;
+      --yellow: #ffd93d;
+      --green: #6bcb77;
+      --blue: #4d96ff;
+      --purple: #9b5de5;
+      --pink: #f15bb5;
+      --cyan: #00bbf9;
 
-      --gap: 16px;
-      --edge: 24px;
+      --font-bubble: 'Chewy', 'Comic Sans MS', cursive;
+      --font-hand: 'Gochi Hand', 'Comic Sans MS', cursive;
+      --font-sketch: 'Cabin Sketch', 'Comic Sans MS', cursive;
+      --font-body: 'Fredoka', system-ui, sans-serif;
+
+      --wobbly: 28px 22px 30px 20px / 22px 30px 20px 28px;
+      --shadow: 8px 8px 0 rgba(58, 46, 92, 0.16);
     }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; scroll-padding-top: 80px; }
 
     body {
-      background: var(--bg-dark);
-      color: #fff;
+      background-color: var(--paper);
+      background-image: radial-gradient(rgba(58, 46, 92, 0.09) 1.2px, transparent 1.3px);
+      background-size: 22px 22px;
+      color: var(--ink);
       font-family: var(--font-body);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+    body.locked { overflow: hidden; }
+
+    img { display: block; }
+    button { font: inherit; color: inherit; }
+
+    /* ==============================================================
+       SCRIBBLY DOODLE BACKGROUND
+       ============================================================== */
+    #doodles {
+      position: fixed;
+      inset: 0;
+      width: 100vw;
       height: 100vh;
-      height: 100dvh;
-      overflow: hidden;
+      z-index: 0;
+      pointer-events: none;
+    }
+    .doodle {
+      fill: none;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      opacity: 0.42;
+      stroke-dasharray: 1;
+      stroke-dashoffset: 1;
+      transform-box: fill-box;
+      transform-origin: center;
+      animation: drawIn 2.4s ease-out forwards, doodleFloat 9s ease-in-out infinite alternate;
+      animation-delay: var(--d), var(--d);
+    }
+    @keyframes drawIn { to { stroke-dashoffset: 0; } }
+    @keyframes doodleFloat {
+      from { transform: rotate(-4deg) translateY(0); }
+      to   { transform: rotate(4deg) translateY(-8px); }
+    }
+
+    /* ==============================================================
+       SHARED BITS: bubbly letters, buttons, cards
+       ============================================================== */
+    .word { display: inline-block; white-space: nowrap; }
+    .ltr {
+      display: inline-block;
+      -webkit-text-stroke: 3px var(--ink);
+      paint-order: stroke fill;
+      text-shadow: 0 5px 0 var(--ink);
+    }
+    .bounce .ltr {
+      animation: wobble 2.2s ease-in-out infinite;
+      animation-delay: calc(var(--i) * -0.15s);
+    }
+    @keyframes wobble {
+      0%, 100% { transform: translateY(0) rotate(-3deg); }
+      50%      { transform: translateY(-10px) rotate(3deg); }
+    }
+
+    .crayon { filter: url(#crayon); }
+
+    .btn {
+      --bg: #fff;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: var(--font-bubble);
+      font-size: clamp(17px, 2vw, 21px);
+      letter-spacing: 0.5px;
+      padding: 12px 24px;
+      border: 3px solid var(--ink);
+      border-radius: 999px;
+      box-shadow: 0 5px 0 var(--ink);
+      cursor: pointer;
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+    .btn:hover  { transform: translateY(-2px) rotate(-1.5deg); }
+    .btn:active { transform: translateY(4px); box-shadow: 0 1px 0 var(--ink); }
+    .btn-yellow { --bg: #ffd93d; }
+    .btn-pink   { --bg: #ff8fd0; }
+    .btn-blue   { --bg: #8ec5ff; }
+    .btn-green  { --bg: #8fe3a0; }
+    .btn-red    { --bg: #ff8a8d; }
+
+    .paper-card {
+      background: #fff;
+      border: 4px solid var(--ink);
+      border-radius: var(--wobbly);
+      box-shadow: var(--shadow);
+    }
+
+    /* Scroll-in reveal */
+    .reveal {
+      opacity: 0;
+      transform: translateY(50px);
+      transition: opacity 0.8s ease, transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .reveal.shown { opacity: 1; transform: none; }
+
+    /* ==============================================================
+       GIFT OPENING SCREEN
+       ============================================================== */
+    #giftCurtain {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      background: repeating-linear-gradient(45deg, #ffe3f1 0 26px, #fff4d6 26px 52px);
       display: flex;
       flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 24px 16px;
+      transition: opacity 0.8s ease, visibility 0.8s;
+    }
+    #giftCurtain.gone { opacity: 0; visibility: hidden; }
+
+    .curtain-kicker {
+      font-family: var(--font-hand);
+      font-size: clamp(24px, 4vw, 34px);
+      color: var(--purple);
+      transform: rotate(-3deg);
+    }
+    .curtain-title {
+      font-family: var(--font-bubble);
+      font-size: clamp(40px, 8vw, 84px);
+      line-height: 1.05;
+      margin-top: 6px;
     }
 
-    /* ---------- Ambient layers ---------- */
-    #ambientBg {
+    .gift {
+      position: relative;
+      width: 200px;
+      height: 190px;
+      margin: 34px auto 34px;
+      cursor: pointer;
+      animation: giftShake 2.2s infinite;
+    }
+    @keyframes giftShake {
+      0%, 70%, 100% { transform: rotate(0); }
+      75% { transform: rotate(-7deg); }
+      80% { transform: rotate(7deg); }
+      85% { transform: rotate(-5deg); }
+      90% { transform: rotate(4deg); }
+    }
+    .gift-box {
+      position: absolute;
+      bottom: 0;
+      left: 10px;
+      width: 180px;
+      height: 130px;
+      background: var(--pink);
+      border: 4px solid var(--ink);
+      border-radius: 10px;
+      box-shadow: 0 8px 0 rgba(58, 46, 92, 0.2);
+    }
+    .gift-box::before, .gift-lid::before {
+      content: "";
+      position: absolute;
+      left: 50%;
+      top: 0;
+      bottom: 0;
+      width: 30px;
+      transform: translateX(-50%);
+      background: var(--yellow);
+      border-left: 4px solid var(--ink);
+      border-right: 4px solid var(--ink);
+    }
+    .gift-lid {
+      position: absolute;
+      top: 24px;
+      left: 0;
+      width: 200px;
+      height: 44px;
+      background: #ff7cc8;
+      border: 4px solid var(--ink);
+      border-radius: 10px;
+      z-index: 2;
+      transition: transform 0.7s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .bow {
+      position: absolute;
+      left: 50%;
+      top: -34px;
+      width: 90px;
+      height: 40px;
+      transform: translateX(-50%);
+    }
+    .bow span {
+      position: absolute;
+      top: 0;
+      width: 44px;
+      height: 36px;
+      background: var(--yellow);
+      border: 4px solid var(--ink);
+      border-radius: 50%;
+    }
+    .bow span:first-child { left: 0; transform: rotate(-20deg); }
+    .bow span:last-child  { right: 0; transform: rotate(20deg); }
+    .gift.open { animation: none; }
+    .gift.open .gift-lid { transform: translateY(-170px) rotate(-25deg); }
+
+    /* ==============================================================
+       FLOATING BUBBLE NAV
+       ============================================================== */
+    .bubble-nav {
       position: fixed;
-      inset: -40px;
-      background-size: cover;
-      background-position: center;
-      filter: blur(85px) brightness(0.28) saturate(1.8);
-      transform: scale(1.15);
-      transition: background-image 1.2s ease;
-      z-index: 0;
+      top: 12px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 80;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      padding: 6px;
+      background: #fff;
+      border: 3px solid var(--ink);
+      border-radius: 999px;
+      box-shadow: 0 5px 0 var(--ink);
+      max-width: calc(100vw - 24px);
+      overflow-x: auto;
+      scrollbar-width: none;
     }
-    .fairy-lights {
-      position: fixed; top: 0; left: 0; right: 0; height: 22px;
-      display: flex; justify-content: space-around;
-      z-index: 50; pointer-events: none;
-    }
-    .light-bulb {
-      width: 10px; height: 15px; border-radius: 50%;
-      background: #ffd700; box-shadow: 0 0 14px 4px #ffd700;
-      animation: flicker 1.4s infinite alternate;
-    }
-    .light-bulb:nth-child(2n) { background: #ff4d88; box-shadow: 0 0 14px 4px #ff4d88; animation-delay: .3s; }
-    .light-bulb:nth-child(3n) { background: #00f2fe; box-shadow: 0 0 14px 4px #00f2fe; animation-delay: .6s; }
-    .light-bulb:nth-child(4n) { background: #b18cf0; box-shadow: 0 0 14px 4px #b18cf0; animation-delay: .9s; }
-    @keyframes flicker { from { opacity: .4; transform: scale(.9); } to { opacity: 1; transform: scale(1.15); } }
-
-    .balloon-layer { position: fixed; inset: 0; pointer-events: none; z-index: 1; overflow: hidden; }
-    .balloon { position: absolute; font-size: 38px; animation: floatBalloon 14s infinite linear; opacity: 0; }
-    @keyframes floatBalloon {
-      0% { transform: translateY(110vh) rotate(0); opacity: 0; }
-      10%, 90% { opacity: .6; }
-      100% { transform: translateY(-20vh) rotate(20deg); opacity: 0; }
-    }
-
-    /* ---------- Header ---------- */
-    header {
-      position: relative; z-index: 10;
-      display: flex; align-items: center; justify-content: space-between; gap: 16px;
-      padding: 26px var(--edge) 14px;
-    }
-    .brand { display: flex; align-items: baseline; gap: 14px; min-width: 0; }
-    .brand h1 {
-      font-family: var(--font-serif); font-weight: 800; font-size: 30px; line-height: 1;
-      background: linear-gradient(135deg, #fff 40%, var(--gold) 85%, #ffb6c1);
-      -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+    .bubble-nav::-webkit-scrollbar { display: none; }
+    .bubble-nav a {
+      font-family: var(--font-bubble);
+      font-size: 17px;
+      color: var(--ink);
+      text-decoration: none;
+      padding: 8px 14px;
+      border-radius: 999px;
       white-space: nowrap;
+      transition: background 0.2s ease, transform 0.2s ease;
     }
-    .brand .script { font-family: var(--font-script); font-size: 34px; color: var(--pink); line-height: 1; white-space: nowrap; }
-    .header-meta { display: flex; align-items: center; gap: 12px; }
-    .chip {
-      font-size: 12px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase;
-      color: var(--gold); white-space: nowrap;
-    }
-    .audio-badge {
-      display: flex; align-items: center; gap: 10px;
-      background: var(--glass-panel); border: 1px solid var(--glass-border);
-      padding: 8px 16px; border-radius: 25px; cursor: pointer;
-      font: 500 13px var(--font-body); color: #fff;
+    .bubble-nav a:hover  { transform: translateY(-2px) rotate(-2deg); }
+    .bubble-nav a.active { background: var(--yellow); }
+
+    .music-btn {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--pink);
+      color: #fff;
+      border: 3px solid var(--ink);
+      border-radius: 999px;
+      padding: 6px 14px;
+      font-family: var(--font-bubble);
+      font-size: 16px;
+      white-space: nowrap;
+      cursor: pointer;
+      margin-left: 4px;
     }
     .eq-bars { display: flex; align-items: flex-end; gap: 3px; height: 14px; }
-    .eq-bar { width: 2.5px; background: var(--gold); border-radius: 2px; animation: bounceEq .8s infinite alternate; }
+    .eq-bar  { width: 3px; background: #fff; border-radius: 2px; animation: bounceEq 0.8s infinite alternate; }
     .eq-bar:nth-child(1) { height: 35%; }
-    .eq-bar:nth-child(2) { height: 95%; animation-delay: .2s; }
-    .eq-bar:nth-child(3) { height: 60%; animation-delay: .4s; }
+    .eq-bar:nth-child(2) { height: 95%; animation-delay: 0.2s; }
+    .eq-bar:nth-child(3) { height: 60%; animation-delay: 0.4s; }
     .paused .eq-bar { animation: none; height: 30%; }
     @keyframes bounceEq { from { height: 20%; } to { height: 100%; } }
 
-    /* ---------- Bento grid ---------- */
-    main.bento {
-      position: relative; z-index: 5;
-      flex: 1; min-height: 0;
-      display: grid;
-      gap: var(--gap);
-      padding: 0 var(--edge) var(--edge);
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-      grid-template-rows: minmax(0, 1fr) minmax(0, 1fr) auto;
-      grid-template-areas:
-        "photo photo timer timer"
-        "photo photo cake  quiz"
-        "strip strip strip strip";
+    /* ==============================================================
+       SECTIONS
+       ============================================================== */
+    main { position: relative; z-index: 2; }
+    section { position: relative; padding: 110px 24px 90px; }
+    .wrap { max-width: 1200px; margin: 0 auto; }
+
+    .section-head { text-align: center; margin-bottom: 36px; }
+    .section-title {
+      font-family: var(--font-bubble);
+      font-size: clamp(38px, 6.5vw, 72px);
+      line-height: 1.1;
+    }
+    .section-title .ltr { -webkit-text-stroke: 2.5px var(--ink); text-shadow: 0 4px 0 var(--ink); }
+    .section-sub {
+      font-family: var(--font-hand);
+      font-size: clamp(20px, 2.6vw, 28px);
+      color: var(--purple);
+      margin-top: 8px;
+    }
+    .scribble-underline { display: block; margin: 2px auto 0; width: min(340px, 70%); height: 24px; overflow: visible; }
+
+    /* ---------- HERO ---------- */
+    #home {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding-top: 100px;
+    }
+    .hero-kicker {
+      display: inline-block;
+      font-family: var(--font-hand);
+      font-size: clamp(22px, 3vw, 32px);
+      color: var(--purple);
+      transform: rotate(-3deg);
+    }
+    .hero-title {
+      font-family: var(--font-bubble);
+      font-size: clamp(54px, 11vw, 150px);
+      line-height: 1.05;
+      margin-top: 10px;
+    }
+    .hero-title .word { margin: 0 0.1em; }
+    .hero-title .ltr { -webkit-text-stroke: 4px var(--ink); text-shadow: 0 7px 0 var(--ink); }
+    .hero-name {
+      display: inline-block;
+      font-family: var(--font-hand);
+      font-size: clamp(70px, 14vw, 180px);
+      line-height: 1;
+      margin-top: 4px;
+      color: var(--pink);
+      transform: rotate(-4deg);
+      text-shadow: 5px 5px 0 var(--yellow), 9px 9px 0 rgba(58, 46, 92, 0.18);
     }
 
-    .card {
-      background: var(--glass-panel);
-      border: 1px solid var(--glass-border);
-      border-radius: 22px;
-      backdrop-filter: blur(20px);
-      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.55);
-      padding: 20px 22px;
-      min-height: 0;
-      overflow: hidden;
+    .count-card {
+      position: relative;
+      max-width: 780px;
+      margin: 34px auto 0;
+      padding: 24px 20px 28px;
+    }
+    .count-title { font-family: var(--font-bubble); font-size: clamp(24px, 3.4vw, 36px); }
+    .count-date  { font-family: var(--font-hand); font-size: clamp(18px, 2.2vw, 22px); color: var(--purple); margin-top: 2px; }
+    .count-grid {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: clamp(10px, 2vw, 20px);
+      margin-top: 18px;
+    }
+    .count-bubble {
+      width: clamp(70px, 16vw, 128px);
+      aspect-ratio: 1;
+      border-radius: 50%;
+      background: var(--c);
+      border: 4px solid var(--ink);
+      box-shadow: 0 6px 0 var(--ink);
       display: flex;
       flex-direction: column;
+      align-items: center;
+      justify-content: center;
     }
-    .card-label {
-      font-size: 11.5px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase;
-      color: var(--gold); margin-bottom: 6px;
+    .count-bubble.tick { animation: pop 0.35s ease; }
+    @keyframes pop { 50% { transform: scale(1.12) rotate(4deg); } }
+    .count-num {
+      font-family: var(--font-bubble);
+      font-size: clamp(28px, 6vw, 54px);
+      line-height: 1;
+      color: #fff;
+      -webkit-text-stroke: 2px var(--ink);
+      paint-order: stroke fill;
+      font-variant-numeric: tabular-nums;
     }
-    .card-title { font-family: var(--font-serif); font-size: 22px; font-weight: 700; line-height: 1.25; }
+    .count-lbl { font-family: var(--font-hand); font-size: clamp(13px, 2vw, 19px); }
+    .count-foot { font-family: var(--font-hand); font-size: clamp(18px, 2.2vw, 22px); margin-top: 16px; }
 
-    /* ---------- Photo card ---------- */
-    .photo-card { grid-area: photo; padding: 0; position: relative; background: #000; }
-    .screen-photo {
-      position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
-      opacity: 0; transform: scale(1.08);
-      transition: opacity .9s cubic-bezier(.4,0,.2,1), transform 6s ease-out;
+    .scroll-hint {
+      display: inline-block;
+      margin-top: 30px;
+      font-family: var(--font-hand);
+      font-size: 24px;
+      color: var(--ink);
+      text-decoration: none;
+      animation: bounceDown 1.4s ease-in-out infinite;
     }
-    .screen-photo.active { opacity: 1; transform: scale(1); }
+    @keyframes bounceDown { 50% { transform: translateY(10px); } }
 
-    .photo-top {
-      position: absolute; top: 16px; left: 16px; right: 16px; z-index: 3;
-      display: flex; justify-content: space-between; align-items: center; gap: 10px;
+    .hero-cat {
+      position: absolute;
+      right: 4%;
+      bottom: 30px;
+      width: clamp(110px, 13vw, 190px);
     }
-    .tag-ribbon {
-      background: rgba(0,0,0,.6); backdrop-filter: blur(10px);
-      border: 1px solid var(--gold); color: var(--gold);
-      padding: 7px 16px; border-radius: 30px;
-      font-size: 12px; font-weight: 700; letter-spacing: 2px; white-space: nowrap;
-    }
-    .controls { display: flex; gap: 8px; }
-    .ctl {
-      width: 40px; height: 40px; border-radius: 50%;
-      background: rgba(0,0,0,.55); backdrop-filter: blur(10px);
-      border: 1px solid var(--glass-border); color: #fff; font-size: 16px;
-      display: flex; align-items: center; justify-content: center; cursor: pointer;
-      transition: background .2s, color .2s, transform .2s;
-    }
-    .ctl:hover { background: var(--gold); color: #000; transform: scale(1.08); }
-
-    .photo-caption {
-      position: absolute; left: 0; right: 0; bottom: 0; z-index: 2;
-      padding: 70px 24px 26px;
-      background: linear-gradient(to top, rgba(6,4,11,.92) 10%, rgba(6,4,11,.55) 60%, transparent);
-    }
-    .lyric-text {
-      font-size: 20px; font-weight: 300; font-style: italic; line-height: 1.5;
-      min-height: 30px; transition: opacity .3s ease;
-    }
-    .slide-progress {
-      position: absolute; left: 0; right: 0; bottom: 0; height: 4px; z-index: 3;
-      background: rgba(255,255,255,.12);
-    }
-    .slide-progress-fill {
-      height: 100%; width: 0%;
-      background: linear-gradient(90deg, var(--gold), #ff4d88);
+    .hero-cat-left {
+      position: absolute;
+      left: 3%;
+      top: 120px;
+      width: clamp(80px, 9vw, 130px);
+      transform: rotate(-8deg);
     }
 
-    /* ---------- Timer card ---------- */
-    .timer-card { grid-area: timer; justify-content: space-between; }
-    .timer-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; }
-    .timer-date { font-size: 13px; color: var(--muted); text-align: right; white-space: nowrap; }
-    .timer-grid {
-      display: grid; grid-template-columns: repeat(var(--units, 4), minmax(0, 1fr)); gap: 12px;
-      margin: 14px 0;
+    /* ---------- MEMORIES SLIDESHOW ---------- */
+    .slideshow {
+      position: relative;
+      padding: clamp(10px, 1.6vw, 18px) clamp(10px, 1.6vw, 18px) 22px;
+      transform: rotate(-0.6deg);
     }
-    .unit {
-      background: rgba(0,0,0,.35); border: 1px solid rgba(255,255,255,.08);
-      border-radius: 16px; padding: 14px 6px; text-align: center;
+    .tape {
+      position: absolute;
+      width: 120px;
+      height: 34px;
+      background: rgba(255, 217, 61, 0.78);
+      border: 2px dashed rgba(58, 46, 92, 0.25);
+      z-index: 6;
     }
-    .unit-num {
-      font-family: var(--font-serif); font-weight: 800; font-size: clamp(30px, 3.6vw, 54px); line-height: 1;
-      color: var(--gold); font-variant-numeric: tabular-nums;
-      text-shadow: 0 0 24px rgba(255,215,0,.25);
-    }
-    .unit-label { margin-top: 8px; font-size: 11px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); }
-    .timer-foot { font-size: 14px; color: var(--muted); }
-    .timer-foot strong { color: var(--pink); font-weight: 600; }
+    .tape.tl { top: -14px; left: -30px; transform: rotate(-35deg); }
+    .tape.tr { top: -14px; right: -30px; transform: rotate(35deg); background: rgba(241, 91, 181, 0.6); }
 
-    /* ---------- Cake card ---------- */
-    .cake-card { grid-area: cake; align-items: center; text-align: center; }
-    .cake-sub { font-size: 13.5px; color: var(--muted); margin-top: 4px; min-height: 36px; }
-    .cake-stage {
-      flex: 1; min-height: 0; width: 100%;
-      display: flex; flex-direction: column; align-items: center; justify-content: flex-end;
-      cursor: pointer; position: relative; padding-top: 30px;
+    .slide-stage {
+      position: relative;
+      height: min(76vh, 760px);
+      border: 3px solid var(--ink);
+      border-radius: 18px;
+      overflow: hidden;
+      background: var(--ink);
     }
-    .candle-group { display: flex; gap: 18px; margin-bottom: -2px; }
+    .slides { position: absolute; inset: 0; perspective: 1600px; }
+
+    .slide {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      z-index: 0;
+      overflow: hidden;
+      backface-visibility: hidden;
+    }
+    .slide.active  { opacity: 1; z-index: 2; }
+    .slide.leaving { opacity: 1; z-index: 1; }
+    .slide .bg {
+      position: absolute;
+      top: -30px;
+      left: -30px;
+      width: calc(100% + 60px);
+      height: calc(100% + 60px);
+      object-fit: cover;
+      filter: blur(28px) brightness(0.75) saturate(1.4);
+    }
+    .slide .fg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; }
+    .slide.active .fg { animation: kenburns 7s ease-out both; }
+    @keyframes kenburns { from { transform: scale(1); } to { transform: scale(1.06); } }
+
+    /* Transition effects — one is picked per slide change */
+    .slide.fx {
+      animation-duration: 1s;
+      animation-fill-mode: both;
+      animation-timing-function: cubic-bezier(0.65, 0, 0.35, 1);
+    }
+
+    .slide.in-zoom  { animation-name: inZoom; }
+    .slide.out-zoom { animation-name: outZoom; }
+    @keyframes inZoom  { from { opacity: 0; transform: scale(1.25); } to { opacity: 1; transform: scale(1); } }
+    @keyframes outZoom { to { opacity: 0; transform: scale(0.85); } }
+
+    .slide.in-slide      { animation-name: inSlide; }
+    .slide.out-slide     { animation-name: outSlide; }
+    .slide.rev.in-slide  { animation-name: inSlideRev; }
+    .slide.rev.out-slide { animation-name: outSlideRev; }
+    @keyframes inSlide     { from { transform: translateX(105%) rotate(6deg); } to { transform: none; } }
+    @keyframes outSlide    { to { transform: translateX(-105%) rotate(-6deg); } }
+    @keyframes inSlideRev  { from { transform: translateX(-105%) rotate(-6deg); } to { transform: none; } }
+    @keyframes outSlideRev { to { transform: translateX(105%) rotate(6deg); } }
+
+    .slide.in-circle  { animation-name: inCircle; }
+    .slide.out-circle { animation-name: hold; }
+    @keyframes inCircle { from { clip-path: circle(0% at 50% 50%); } to { clip-path: circle(75% at 50% 50%); } }
+    @keyframes hold { to { opacity: 1; } }
+
+    .slide.in-flip  { animation-name: inFlip; }
+    .slide.out-flip { animation-name: outFlip; }
+    @keyframes inFlip {
+      0%, 50% { transform: rotateY(-90deg); opacity: 0; }
+      51%     { opacity: 1; }
+      100%    { transform: rotateY(0); opacity: 1; }
+    }
+    @keyframes outFlip {
+      0%       { transform: rotateY(0); opacity: 1; }
+      49%      { opacity: 1; }
+      50%, 100% { transform: rotateY(90deg); opacity: 0; }
+    }
+
+    .slide.in-wipe  { animation-name: inWipe; }
+    .slide.out-wipe { animation-name: hold; }
+    @keyframes inWipe {
+      from { clip-path: polygon(0 0, 0 0, -40% 100%, -40% 100%); }
+      to   { clip-path: polygon(0 0, 140% 0, 100% 100%, -40% 100%); }
+    }
+
+    .slide.in-spin  { animation-name: inSpin; }
+    .slide.out-spin { animation-name: outZoom; }
+    @keyframes inSpin { from { transform: scale(0) rotate(-200deg); opacity: 0; } to { transform: none; opacity: 1; } }
+
+    .slide.in-drop  { animation-name: inDrop; animation-timing-function: cubic-bezier(0.34, 1.56, 0.64, 1); }
+    .slide.out-drop { animation-name: outDrop; }
+    @keyframes inDrop  { from { transform: translateY(-105%); } to { transform: none; } }
+    @keyframes outDrop { to { transform: translateY(40%) scale(0.9); opacity: 0; } }
+
+    .stage-badge {
+      position: absolute;
+      top: 14px;
+      z-index: 5;
+      background: #fff;
+      border: 3px solid var(--ink);
+      border-radius: 999px;
+      padding: 5px 14px;
+      font-family: var(--font-bubble);
+      font-size: clamp(14px, 1.8vw, 18px);
+      box-shadow: 0 4px 0 var(--ink);
+    }
+    .stage-badge.left  { left: 14px; }
+    .stage-badge.right { right: 14px; background: var(--yellow); }
+    .stage-badge.pop   { animation: pop 0.4s ease; }
+
+    .stage-arrow {
+      position: absolute;
+      top: 50%;
+      z-index: 5;
+      width: clamp(44px, 5vw, 60px);
+      aspect-ratio: 1;
+      transform: translateY(-50%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #fff;
+      border: 3px solid var(--ink);
+      border-radius: 50%;
+      box-shadow: 0 4px 0 var(--ink);
+      font-family: var(--font-bubble);
+      font-size: clamp(30px, 3.4vw, 42px);
+      line-height: 1;
+      cursor: pointer;
+      transition: background 0.2s ease;
+    }
+    .stage-arrow:hover { background: var(--yellow); }
+    .stage-arrow.prev { left: 14px; }
+    .stage-arrow.next { right: 14px; }
+
+    .caption {
+      font-family: var(--font-hand);
+      font-size: clamp(22px, 3vw, 34px);
+      text-align: center;
+      margin: 16px 8px 4px;
+      min-height: 1.4em;
+      transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+    .caption.hide { opacity: 0; transform: translateY(8px) rotate(-2deg); }
+
+    .progress {
+      height: 14px;
+      margin: 12px 4px 0;
+      background: #fff;
+      border: 3px solid var(--ink);
+      border-radius: 999px;
+      overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%;
+      width: 0%;
+      background: repeating-linear-gradient(90deg,
+        #ff5a5f 0 20px, #ffa630 20px 40px, #ffd93d 40px 60px,
+        #6bcb77 60px 80px, #4d96ff 80px 100px, #9b5de5 100px 120px);
+    }
+
+    .slide-controls {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 18px;
+    }
+    .slide-hint { text-align: center; font-family: var(--font-hand); font-size: 18px; color: var(--purple); margin-top: 10px; }
+
+    .thumbs {
+      position: relative;
+      display: flex;
+      gap: 14px;
+      overflow-x: auto;
+      padding: 22px 8px 16px;
+      margin-top: 18px;
+      scrollbar-width: thin;
+      scrollbar-color: var(--pink) transparent;
+    }
+    .thumb {
+      flex: 0 0 88px;
+      background: #fff;
+      padding: 5px 5px 16px;
+      border: 3px solid var(--ink);
+      border-radius: 6px;
+      cursor: pointer;
+      transform: rotate(var(--r));
+      transition: transform 0.25s ease, background 0.25s ease;
+    }
+    .thumb img { width: 100%; height: 84px; object-fit: cover; border-radius: 3px; }
+    .thumb:hover  { transform: rotate(0) translateY(-4px); }
+    .thumb.active { transform: rotate(0) translateY(-6px) scale(1.08); background: var(--yellow); }
+
+    /* ---------- CAKE ---------- */
+    .cake-scene {
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      gap: clamp(4px, 2vw, 24px);
+      margin-top: 10px;
+    }
+    .cake-cat { width: clamp(64px, 16vw, 180px); flex-shrink: 0; margin-bottom: -4px; }
+    .cake-cat .cat-hat { opacity: 0; transform: translateY(-30px); transition: opacity 0.4s ease, transform 0.4s ease; }
+    .cake-cat.party .cat-hat { opacity: 1; transform: none; }
+    .cake-cat.party svg { animation: catJump 0.6s ease-in-out 4; }
+    @keyframes catJump { 50% { transform: translateY(-40px) rotate(-8deg); } }
+
+    .cake-wrap {
+      width: min(580px, 68vw);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .candles {
+      position: relative;
+      z-index: 3;
+      width: 52%;
+      display: flex;
+      justify-content: space-evenly;
+      align-items: flex-end;
+      padding-top: 56px;
+      margin-bottom: -4px;
+    }
     .candle {
-      width: 10px; height: 38px; position: relative; border-radius: 5px 5px 0 0;
-      background: repeating-linear-gradient(45deg, #fff, #fff 4px, #ff4d88 4px, #ff4d88 8px);
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-end;
+      cursor: pointer;
+      outline: none;
+    }
+    .candle.small {
+      width: clamp(9px, 2.2vw, 15px);
+      height: clamp(42px, 10vw, 74px);
+      border: 3px solid var(--ink);
+      border-radius: 6px 6px 2px 2px;
+      background: repeating-linear-gradient(-45deg, #fff 0 5px, var(--stripe) 5px 10px);
+    }
+    .candle.num .num-txt {
+      display: block;
+      font-family: var(--font-bubble);
+      font-size: clamp(56px, 13vw, 110px);
+      line-height: 0.8;
+      -webkit-text-stroke: 4px var(--ink);
+      paint-order: stroke fill;
+      text-shadow: 0 5px 0 var(--ink);
+    }
+    .wick {
+      position: absolute;
+      bottom: 100%;
+      left: 50%;
+      width: 3px;
+      height: 9px;
+      background: var(--ink);
+      transform: translateX(-50%);
     }
     .flame {
-      position: absolute; top: -20px; left: 50%; transform: translateX(-50%);
-      width: 13px; height: 20px; border-radius: 50% 50% 20% 20%;
-      background: radial-gradient(circle at bottom, #fffa85, #ff5722);
-      box-shadow: 0 0 22px 6px #ff9800;
-      animation: flickerFlame .8s infinite alternate ease-in-out;
-      transition: opacity .5s ease;
+      position: absolute;
+      bottom: calc(100% + 6px);
+      left: 50%;
+      width: 16px;
+      height: 26px;
+      margin-left: -8px;
+      border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+      background: radial-gradient(circle at 50% 75%, #fff8b0 0 25%, #ffd93d 45%, #ff8c1a 75%, #ff5a5f);
+      box-shadow: 0 0 18px 6px rgba(255, 170, 40, 0.65);
+      transform-origin: 50% 90%;
+      animation: flameFlicker 0.6s ease-in-out infinite alternate;
     }
-    @keyframes flickerFlame { from { transform: translateX(-50%) scale(.9) rotate(-3deg); } to { transform: translateX(-50%) scale(1.15) rotate(3deg); } }
-    .flame.blown { opacity: 0 !important; animation: none !important; }
-    .cake-tier-top {
-      width: 120px; height: 46px; border-top: 5px solid #fff; border-radius: 12px 12px 6px 6px;
-      background: linear-gradient(135deg, #ff8fb3, #ff4d88);
-      box-shadow: inset 0 -6px 0 rgba(0,0,0,.15);
+    .candle.num .flame { width: 22px; height: 34px; margin-left: -11px; }
+    @keyframes flameFlicker { from { transform: scale(0.92) rotate(-4deg); } to { transform: scale(1.08) rotate(4deg); } }
+    .candle.out .flame { animation: flameOut 0.35s forwards; }
+    @keyframes flameOut { to { transform: scale(0); opacity: 0; } }
+    .smoke {
+      position: absolute;
+      bottom: calc(100% + 6px);
+      left: 50%;
+      width: 14px;
+      height: 14px;
+      margin-left: -7px;
+      border-radius: 50%;
+      background: rgba(120, 120, 140, 0.5);
+      pointer-events: none;
+      animation: smokeUp 1.5s ease-out forwards;
     }
-    .cake-tier-bottom {
-      width: 175px; height: 60px; border-top: 6px solid #fff; border-radius: 14px 14px 10px 10px;
-      background: linear-gradient(135deg, #ffd700, #ffb300);
-    }
-    .cake-stand { width: 205px; height: 10px; background: #e2e8f0; border-radius: 8px; box-shadow: 0 10px 25px rgba(0,0,0,.5); }
+    @keyframes smokeUp { to { transform: translate(10px, -80px) scale(3); opacity: 0; } }
 
-    .pill-btn {
-      margin-top: 14px; border: none; cursor: pointer;
-      background: linear-gradient(135deg, var(--gold), #ff9800); color: #0c0817;
-      padding: 11px 24px; border-radius: 50px;
-      font: 700 14px var(--font-body);
-      box-shadow: 0 8px 24px var(--gold-glow); transition: transform .2s;
+    .tier {
+      position: relative;
+      margin-top: -4px;
+      border: 4px solid var(--ink);
+      border-radius: 20px 20px 12px 12px;
+      overflow: hidden;
     }
-    .pill-btn:hover { transform: scale(1.05); }
-
-    /* ---------- Quiz card ---------- */
-    .quiz-card { grid-area: quiz; text-align: center; }
-    .quiz-question { font-family: var(--font-serif); font-size: 17px; font-weight: 700; line-height: 1.35; }
-    .arena {
-      position: relative; flex: 1; min-height: 110px; margin-top: 10px;
-      display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 10px;
-    }
-    #btnYes, #btnNo {
-      border: none; color: #fff; cursor: pointer; border-radius: 50px;
-      font: 700 14px var(--font-body); padding: 11px 20px;
-    }
-    #btnYes {
-      background: linear-gradient(135deg, #10b981, #059669);
-      box-shadow: 0 8px 24px rgba(16,185,129,.4);
-      transition: transform .25s cubic-bezier(.34,1.56,.64,1);
-      z-index: 2;
-    }
-    #btnNo {
-      background: linear-gradient(135deg, #ef4444, #b91c1c);
-      box-shadow: 0 8px 24px rgba(239,68,68,.4);
-      transition: left .15s ease-out, top .15s ease-out;
+    .tier-top { width: 52%; aspect-ratio: 3.1 / 1; background: linear-gradient(90deg, #f15bb5, #ff7cc8 50%, #f15bb5); }
+    .tier-mid { width: 74%; aspect-ratio: 3.6 / 1; background: linear-gradient(90deg, #9b5de5, #b388ff 50%, #9b5de5); }
+    .tier-bot { width: 94%; aspect-ratio: 4.2 / 1; background: linear-gradient(90deg, #ffb703, #ffd93d 50%, #ffb703); }
+    .drip { position: absolute; top: 0; left: 0; width: 100%; height: 42%; z-index: 1; }
+    .sprinkles { position: absolute; inset: 0; z-index: 2; }
+    .sprinkles i { position: absolute; width: 9px; height: 4px; border-radius: 3px; }
+    .tier-text {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 10%;
       z-index: 3;
+      text-align: center;
+      font-family: var(--font-hand);
+      font-size: clamp(22px, 5vw, 46px);
+      color: #fff;
+      -webkit-text-stroke: 1.5px var(--ink);
+      paint-order: stroke fill;
     }
-    .taunt-msg { font-size: 13px; font-weight: 600; color: var(--gold); min-height: 34px; line-height: 1.3; }
-
-    /* ---------- Filmstrip ---------- */
-    .filmstrip {
-      grid-area: strip;
-      display: flex; gap: 10px; overflow-x: auto;
-      padding: 6px 2px 8px;
-      scrollbar-width: thin; scrollbar-color: var(--gold) transparent;
-    }
-    .filmstrip::-webkit-scrollbar { height: 5px; }
-    .filmstrip::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 10px; }
-    .thumb-card {
-      flex: 1 0 64px; max-width: 110px; height: 72px;
-      border-radius: 12px; overflow: hidden; cursor: pointer;
-      border: 2px solid transparent; opacity: .5; transition: all .3s ease;
-    }
-    .thumb-card img { width: 100%; height: 100%; object-fit: cover; display: block; }
-    .thumb-card.active, .thumb-card:hover {
-      opacity: 1; transform: translateY(-4px);
-      border-color: var(--gold); box-shadow: 0 8px 20px var(--gold-glow);
+    .tier-text.small { font-size: clamp(14px, 3vw, 26px); }
+    .plate {
+      width: 104%;
+      height: clamp(14px, 2.6vw, 24px);
+      margin-top: -4px;
+      background: #e9ecf5;
+      border: 4px solid var(--ink);
+      border-radius: 50%;
     }
 
-    /* ---------- Opening curtain ---------- */
-    #revealCurtain {
-      position: fixed; inset: 0; z-index: 9999;
-      background: radial-gradient(circle at center, #231238 0%, #06040b 100%);
-      display: flex; flex-direction: column; justify-content: center; align-items: center;
-      text-align: center; padding: 30px;
-      transition: opacity .9s cubic-bezier(.4,0,.2,1), visibility .9s;
-    }
-    .curtain-gold { font-size: 14px; font-weight: 700; color: var(--gold); letter-spacing: 5px; margin-bottom: 12px; text-transform: uppercase; }
-    .curtain-big {
-      font-family: var(--font-serif); font-size: 68px; font-weight: 800; margin-bottom: 8px;
-      background: linear-gradient(135deg, #fff 40%, var(--gold) 90%);
-      -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
-    }
-    .curtain-script { font-family: var(--font-script); font-size: 44px; color: var(--pink); margin-bottom: 14px; }
-    .curtain-desc { color: rgba(255,255,255,.75); font-size: 17px; margin-bottom: 35px; max-width: 600px; line-height: 1.6; }
-    .enter-btn {
-      background: linear-gradient(135deg, var(--gold), #ff9800); color: #0a0614;
-      font: 800 17px var(--font-body); letter-spacing: 1.5px; text-transform: uppercase;
-      padding: 18px 54px; border-radius: 50px; border: none; cursor: pointer;
-      box-shadow: 0 15px 45px var(--gold-glow); transition: transform .25s ease;
-    }
-    .enter-btn:hover { transform: scale(1.06); }
+    .cake-status { text-align: center; font-family: var(--font-hand); font-size: clamp(20px, 2.6vw, 28px); margin-top: 22px; }
+    .cake-actions { display: flex; justify-content: center; flex-wrap: wrap; gap: 12px; margin-top: 14px; }
 
-    /* ---------- Tablet: two columns, page scrolls ---------- */
-    @media (max-width: 1100px) {
-      body { height: auto; min-height: 100dvh; overflow-y: auto; }
-      main.bento {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        grid-template-rows: none;
-        grid-auto-rows: auto;
-        grid-template-areas:
-          "photo photo"
-          "strip strip"
-          "timer timer"
-          "cake  quiz";
-      }
-      .photo-card { height: 62vh; min-height: 360px; }
-      .cake-card, .quiz-card { min-height: 360px; }
+    .wish-result {
+      display: none;
+      max-width: 640px;
+      margin: 26px auto 0;
+      padding: 22px 24px;
+      text-align: center;
+      background: #fffbe0;
+    }
+    .wish-result.show { display: block; animation: popIn 0.6s cubic-bezier(0.34, 1.56, 0.64, 1); }
+    .wr-big { font-family: var(--font-bubble); font-size: clamp(30px, 5vw, 50px); color: var(--orange); -webkit-text-stroke: 2px var(--ink); paint-order: stroke fill; }
+    .wish-result p { font-family: var(--font-hand); font-size: clamp(19px, 2.4vw, 25px); margin-top: 6px; }
+    @keyframes popIn { from { transform: scale(0.4) rotate(-8deg); opacity: 0; } to { transform: none; opacity: 1; } }
+
+    /* ---------- SRIRAM TEST ---------- */
+    .quiz-card {
+      position: relative;
+      max-width: 880px;
+      margin: 0 auto;
+      padding: clamp(24px, 4vw, 48px);
+      text-align: center;
+    }
+    .quiz-badge {
+      display: inline-block;
+      font-family: var(--font-sketch);
+      font-size: clamp(15px, 2vw, 19px);
+      background: var(--yellow);
+      border: 3px solid var(--ink);
+      border-radius: 999px;
+      padding: 4px 16px;
+      transform: rotate(-2deg);
+      margin-bottom: 14px;
+    }
+    .quiz-q { font-family: var(--font-bubble); font-size: clamp(26px, 3.8vw, 42px); line-height: 1.2; }
+    .quiz-note { font-family: var(--font-hand); font-size: clamp(19px, 2.4vw, 24px); color: var(--purple); margin-top: 8px; }
+    .arena {
+      position: relative;
+      height: clamp(220px, 30vw, 280px);
+      margin-top: 22px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      gap: 22px;
+      border: 3px dashed rgba(58, 46, 92, 0.25);
+      border-radius: 24px;
+    }
+    #btnYes { font-size: clamp(18px, 2.4vw, 24px); transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1); z-index: 2; }
+    #btnNo  { transition: left 0.15s ease-out, top 0.15s ease-out, transform 0.15s ease; z-index: 3; }
+    .taunt { font-family: var(--font-hand); font-size: clamp(19px, 2.4vw, 24px); color: var(--pink); min-height: 1.5em; margin-top: 14px; }
+
+    .certificate {
+      display: none;
+      margin: 22px auto 0;
+      max-width: 620px;
+      padding: 22px 26px;
+      background: #fffdf3;
+      border: 6px double var(--ink);
+      border-radius: 18px;
+      transform: rotate(-1deg);
+    }
+    .certificate.show { display: block; animation: popIn 0.6s cubic-bezier(0.34, 1.56, 0.64, 1); }
+    .cert-title { font-family: var(--font-sketch); font-size: clamp(24px, 3.4vw, 34px); }
+    .certificate p { font-family: var(--font-hand); font-size: clamp(19px, 2.4vw, 24px); margin-top: 8px; line-height: 1.35; }
+    .cert-sign {
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 14px;
+      font-family: var(--font-hand);
+      font-size: 19px;
+      color: var(--purple);
     }
 
-    /* ---------- Phone: single column ---------- */
-    @media (max-width: 680px) {
-      :root { --edge: 16px; --gap: 12px; }
-      header { flex-wrap: wrap; padding-top: 24px; }
-      .brand h1 { font-size: 24px; }
-      .brand .script { font-size: 28px; }
-      .chip { display: none; }
-      main.bento {
-        grid-template-columns: minmax(0, 1fr);
-        grid-template-areas: "photo" "strip" "timer" "cake" "quiz";
-      }
-      .photo-card { height: 56vh; min-height: 320px; border-radius: 18px; }
-      .tag-ribbon { font-size: 10.5px; padding: 6px 12px; letter-spacing: 1.5px; }
-      .ctl { width: 36px; height: 36px; font-size: 14px; }
-      .photo-caption { padding: 60px 16px 20px; }
-      .lyric-text { font-size: 16.5px; }
-      .card { padding: 18px; }
-      .timer-grid { gap: 8px; }
-      .unit { padding: 12px 4px; }
-      .unit-num { font-size: 30px; }
-      .unit-label { font-size: 9.5px; letter-spacing: 1px; }
-      .cake-card { min-height: 320px; }
-      .quiz-card { min-height: 340px; }
-      .thumb-card { flex: 0 0 58px; height: 66px; }
-      .curtain-big { font-size: 40px; }
-      .curtain-script { font-size: 36px; }
-      .curtain-gold { font-size: 11.5px; letter-spacing: 3px; }
-      .curtain-desc { font-size: 15.5px; }
-      .enter-btn { font-size: 15px; padding: 16px 34px; }
+    /* ---------- 21 WISHES ---------- */
+    .wish-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      gap: 18px;
+    }
+    .wish {
+      aspect-ratio: 1;
+      perspective: 900px;
+      background: none;
+      border: none;
+      padding: 0;
+      cursor: pointer;
+      rotate: var(--r);
+    }
+    .wish-inner {
+      position: relative;
+      display: block;
+      width: 100%;
+      height: 100%;
+      transform-style: preserve-3d;
+      transition: transform 0.7s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .wish.flipped .wish-inner { transform: rotateY(180deg); }
+    .wish-face {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 12px;
+      text-align: center;
+      border: 4px solid var(--ink);
+      border-radius: var(--wobbly);
+      box-shadow: 0 6px 0 var(--ink);
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+    }
+    .wish-front { background: var(--c); }
+    .wish-num {
+      font-family: var(--font-bubble);
+      font-size: clamp(48px, 6vw, 66px);
+      line-height: 1;
+      color: #fff;
+      -webkit-text-stroke: 3px var(--ink);
+      paint-order: stroke fill;
+    }
+    .wish-tap { font-family: var(--font-hand); font-size: 18px; }
+    .wish-back {
+      background: #fff;
+      transform: rotateY(180deg);
+      font-family: var(--font-hand);
+      font-size: clamp(17px, 2vw, 21px);
+      line-height: 1.25;
+    }
+    .wish-count { text-align: center; font-family: var(--font-hand); font-size: clamp(20px, 2.6vw, 26px); margin-top: 24px; }
+
+    /* ---------- FOOTER ---------- */
+    footer {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      padding: 40px 24px 150px;
+    }
+    .footer-cat { position: relative; width: 150px; margin: 0 auto; }
+    .zzz { position: absolute; right: -10px; top: 0; font-family: var(--font-bubble); color: var(--purple); }
+    .zzz i { position: absolute; font-style: normal; opacity: 0; animation: zzz 3s infinite; }
+    .zzz i:nth-child(1) { font-size: 18px; animation-delay: 0s; }
+    .zzz i:nth-child(2) { font-size: 24px; animation-delay: 1s; }
+    .zzz i:nth-child(3) { font-size: 32px; animation-delay: 2s; }
+    @keyframes zzz {
+      0%   { transform: translate(0, 0); opacity: 0; }
+      20%  { opacity: 1; }
+      100% { transform: translate(30px, -60px); opacity: 0; }
+    }
+    footer p { font-family: var(--font-hand); font-size: clamp(20px, 2.6vw, 26px); margin-top: 10px; }
+    footer .big { font-family: var(--font-bubble); font-size: clamp(30px, 5vw, 48px); color: var(--pink); -webkit-text-stroke: 2px var(--ink); paint-order: stroke fill; }
+
+    /* ==============================================================
+       CATS
+       ============================================================== */
+    .cat-tail { animation: tailWag 1.4s ease-in-out infinite alternate; }
+    @keyframes tailWag { from { transform: rotate(-8deg); } to { transform: rotate(14deg); } }
+
+    .cat-sit .cat-tail { transform-origin: 138px 170px; }
+    .cat-sit .cat-head { transform-origin: 100px 130px; animation: headTilt 5s ease-in-out infinite; }
+    @keyframes headTilt { 0%, 100% { transform: rotate(0); } 30% { transform: rotate(-7deg); } 60% { transform: rotate(5deg); } }
+
+    .cat-eyes { animation: blink 4.5s infinite; }
+    .cat-sit .cat-eyes { transform-origin: 100px 88px; }
+    @keyframes blink { 0%, 92%, 100% { transform: scaleY(1); } 95% { transform: scaleY(0.1); } }
+
+    .cat-sleep-eyes { display: none; }
+    .cat-sit.sleepy .cat-eyes { display: none; }
+    .cat-sit.sleepy .cat-sleep-eyes { display: inline; }
+    .cat-sit.sleepy .cat-head { animation: sleepNod 3s ease-in-out infinite; }
+    @keyframes sleepNod { 50% { transform: rotate(6deg) translateY(4px); } }
+
+    .leg   { animation: legSwing 0.55s ease-in-out infinite alternate; }
+    .leg-b { animation-direction: alternate-reverse; }
+    @keyframes legSwing { from { transform: rotate(22deg); } to { transform: rotate(-22deg); } }
+
+    /* Walking cat that strolls along the bottom of the screen */
+    .cat-walker {
+      position: fixed;
+      left: 0;
+      bottom: 2px;
+      z-index: 70;
+      width: clamp(110px, 12vw, 160px);
+      cursor: pointer;
+      animation: walkAcross 32s linear infinite;
+    }
+    @keyframes walkAcross {
+      0%   { transform: translateX(-200px); }
+      50%  { transform: translateX(calc(100vw + 40px)); }
+      100% { transform: translateX(-200px); }
+    }
+    .cat-flip { animation: flipDir 32s infinite; animation-timing-function: step-end; }
+    @keyframes flipDir {
+      0%   { transform: scaleX(1); }
+      50%  { transform: scaleX(-1); }
+      100% { transform: scaleX(-1); }
+    }
+    .cat-flip svg { display: block; animation: bob 0.275s ease-in-out infinite alternate; }
+    @keyframes bob { to { transform: translateY(-3px); } }
+    .meow-bubble {
+      position: absolute;
+      bottom: 100%;
+      left: 50%;
+      transform: translateX(-50%) scale(0);
+      transform-origin: 50% 100%;
+      background: #fff;
+      border: 3px solid var(--ink);
+      border-radius: 18px;
+      padding: 6px 12px;
+      font-family: var(--font-hand);
+      font-size: 18px;
+      white-space: nowrap;
+      transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .cat-walker.meowing .meow-bubble { transform: translateX(-50%) scale(1); }
+    .cat-walker.meowing,
+    .cat-walker.meowing * { animation-play-state: paused !important; }
+
+    /* ==============================================================
+       PHONE / NARROW
+       ============================================================== */
+    @media (max-width: 760px) {
+      section { padding: 96px 16px 70px; }
+      .hero-cat { position: static; margin: 22px auto 0; }
+      .hero-cat-left { display: none; }
+      .slide-stage { height: 62vh; }
+      .tape { width: 80px; height: 26px; }
+      .tape.tl { left: -16px; }
+      .tape.tr { right: -16px; }
+      .thumb { flex-basis: 70px; }
+      .thumb img { height: 66px; }
+      .wish-grid { grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 14px; }
+    }
+    @media (max-width: 560px) {
+      .bubble-nav a { font-size: 15px; padding: 7px 10px; }
+      .bubble-nav .lbl { display: none; }
+      .music-btn .lbl { display: none; }
+      .stage-badge { font-size: 13px; padding: 4px 10px; }
+      .stage-badge.right { display: none; }
+      .count-card { padding: 20px 12px 22px; }
+      .count-bubble { box-shadow: 0 4px 0 var(--ink); border-width: 3px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .bounce .ltr, .doodle, .gift, .cat-walker, .cat-flip, .cat-flip svg, .scroll-hint { animation: none !important; }
+      .doodle { stroke-dashoffset: 0; }
+      .cat-walker { left: auto; right: 12px; }
     }
   </style>
 </head>
-<body>
+<body class="locked">
 
-  <div id="ambientBg"></div>
+  <!-- SVG filters: crayon texture for text, wobbly lines for doodles -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <defs>
+      <filter id="crayon" x="-5%" y="-10%" width="110%" height="120%">
+        <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" seed="3" result="noise" />
+        <feDisplacementMap in="SourceGraphic" in2="noise" scale="3" xChannelSelector="R" yChannelSelector="G" result="rough" />
+        <feColorMatrix in="noise" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 -2.2 2.1" result="grain" />
+        <feComposite in="rough" in2="grain" operator="in" />
+      </filter>
+      <filter id="rough">
+        <feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="7" result="wobble" />
+        <feDisplacementMap in="SourceGraphic" in2="wobble" scale="5" />
+      </filter>
+    </defs>
+  </svg>
 
-  <div class="fairy-lights">
-    <div class="light-bulb"></div><div class="light-bulb"></div><div class="light-bulb"></div>
-    <div class="light-bulb"></div><div class="light-bulb"></div><div class="light-bulb"></div>
-    <div class="light-bulb"></div><div class="light-bulb"></div><div class="light-bulb"></div>
-    <div class="light-bulb"></div><div class="light-bulb"></div><div class="light-bulb"></div>
-  </div>
+  <svg id="doodles" preserveAspectRatio="xMidYMid slice" aria-hidden="true"></svg>
 
-  <div class="balloon-layer">
-    <div class="balloon" style="left: 3%; animation-delay: 0s;">🎈</div>
-    <div class="balloon" style="left: 46%; animation-delay: 5s;">✨</div>
-    <div class="balloon" style="right: 4%; animation-delay: 2.5s;">🎈</div>
-    <div class="balloon" style="right: 30%; animation-delay: 8s;">🌸</div>
-  </div>
-
-  <!-- Opening Reveal Screen -->
-  <div id="revealCurtain">
-    <div class="curtain-gold">Milestone Celebration // 21 Years</div>
-    <h1 class="curtain-big">Happy 21st Birthday</h1>
-    <div class="curtain-script">Swathi ✨</div>
-    <p class="curtain-desc">Welcome to your personalized 21st Birthday Palace — complete with memories, a countdown, cake, candles, and a special test!</p>
-    <button class="enter-btn" onclick="enterPalace()">Enter Chapter 21 ✨</button>
-  </div>
-
-  <header>
-    <div class="brand">
-      <h1>Happy 21st</h1>
-      <span class="script">Swathi 🌸</span>
+  <!-- ==================== GIFT OPENING SCREEN ==================== -->
+  <div id="giftCurtain">
+    <div class="curtain-kicker">psst... Swathi 👀</div>
+    <h2 class="curtain-title letterize bounce">You've got a present!</h2>
+    <div class="gift" id="gift" onclick="openGift()" role="button" aria-label="Open the present">
+      <div class="gift-lid"><div class="bow"><span></span><span></span></div></div>
+      <div class="gift-box"></div>
     </div>
-    <div class="header-meta">
-      <span class="chip">👑 Chapter 21</span>
-      <button class="audio-badge paused" id="audioToggle" onclick="toggleMusic()">
-        <span class="eq-bars"><span class="eq-bar"></span><span class="eq-bar"></span><span class="eq-bar"></span></span>
-        <span>Rather Be</span>
-      </button>
-    </div>
-  </header>
+    <button class="btn btn-yellow" onclick="openGift()">Open it! 🎁</button>
+  </div>
 
-  <main class="bento">
+  <!-- ==================== NAV ==================== -->
+  <nav class="bubble-nav">
+    <a href="#home">🏠 <span class="lbl">Home</span></a>
+    <a href="#memories">📸 <span class="lbl">Memories</span></a>
+    <a href="#cake">🎂 <span class="lbl">Cake</span></a>
+    <a href="#sriram">😼 <span class="lbl">Sriram Test</span></a>
+    <a href="#wishes">💌 <span class="lbl">21 Wishes</span></a>
+    <button class="music-btn paused" id="musicBtn" onclick="toggleMusic()">
+      <span class="eq-bars"><span class="eq-bar"></span><span class="eq-bar"></span><span class="eq-bar"></span></span>
+      <span class="lbl">Rather Be</span>
+    </button>
+  </nav>
 
-    <!-- Memories slideshow -->
-    <section class="card photo-card" id="mainScreen">
-      <div class="photo-top">
-        <div class="tag-ribbon" id="screenBadge">MEMORY 01 / 19</div>
-        <div class="controls">
-          <button class="ctl" onclick="stepPhoto(-1, true)" aria-label="Previous">←</button>
-          <button class="ctl" id="playPauseBtn" onclick="toggleSlideshow()" aria-label="Pause slideshow">❚❚</button>
-          <button class="ctl" onclick="stepPhoto(1, true)" aria-label="Next">→</button>
+  <main>
+
+    <!-- ==================== HERO + COUNTDOWN ==================== -->
+    <section id="home">
+      <div class="hero-cat-left" id="heroCatLeft"></div>
+      <div class="wrap">
+        <span class="hero-kicker">✏️ guess who's turning twenty-one...</span>
+        <h1 class="hero-title letterize bounce">Happy 21st Birthday</h1>
+        <div class="hero-name crayon">Swathi!</div>
+        <svg class="scribble-underline" viewBox="0 0 300 24" preserveAspectRatio="none" aria-hidden="true">
+          <path d="M4 14 C 60 2, 110 24, 160 12 S 250 4, 296 14" stroke="#ffa630" stroke-width="6" fill="none" stroke-linecap="round" filter="url(#rough)" />
+        </svg>
+
+        <div class="count-card paper-card reveal">
+          <div class="count-title" id="countTitle">⏳ Countdown to Chapter 21</div>
+          <div class="count-date" id="countDate"></div>
+          <div class="count-grid" id="countGrid"></div>
+          <div class="count-foot" id="countFoot"></div>
+        </div>
+
+        <a class="scroll-hint" href="#memories">scroll down for surprises ↓</a>
+      </div>
+      <div class="hero-cat" id="heroCat"></div>
+    </section>
+
+    <!-- ==================== MEMORIES ==================== -->
+    <section id="memories">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <h2 class="section-title letterize">21 Years of Memories</h2>
+          <p class="section-sub">a little slideshow of your best moments 📸</p>
+        </div>
+
+        <div class="reveal">
+          <div class="slideshow paper-card">
+            <span class="tape tl"></span><span class="tape tr"></span>
+            <div class="slide-stage" id="slideStage">
+              <div class="slides" id="slides"></div>
+              <div class="stage-badge left" id="slideBadge">📸 01 / 19</div>
+              <div class="stage-badge right" id="fxBadge">✨ Zoom Fade</div>
+              <button class="stage-arrow prev" onclick="prevSlide()" aria-label="Previous photo">‹</button>
+              <button class="stage-arrow next" onclick="nextSlide()" aria-label="Next photo">›</button>
+            </div>
+            <p class="caption" id="caption"></p>
+            <div class="progress"><div class="progress-fill" id="progressFill"></div></div>
+            <div class="slide-controls">
+              <button class="btn btn-blue" onclick="prevSlide()">⬅ Back</button>
+              <button class="btn btn-yellow" id="playBtn" onclick="togglePlay()">⏸ Pause</button>
+              <button class="btn btn-pink" onclick="nextSlide()">Next ➡</button>
+            </div>
+            <p class="slide-hint">swipe the photo or use ← → keys</p>
+          </div>
+        </div>
+
+        <div class="thumbs" id="thumbs"></div>
+      </div>
+    </section>
+
+    <!-- ==================== CAKE ==================== -->
+    <section id="cake">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <h2 class="section-title letterize">Make a Wish!</h2>
+          <p class="section-sub">tap each candle to blow it out, or blow them all at once 💨</p>
+        </div>
+
+        <div class="cake-scene reveal">
+          <div class="cake-cat" id="cakeCat"></div>
+          <div class="cake-wrap">
+            <div class="candles" id="candles"></div>
+            <div class="tier tier-top" data-icing="#ffffff">
+              <svg class="drip" viewBox="0 0 100 20" preserveAspectRatio="none" aria-hidden="true"></svg>
+              <div class="sprinkles"></div>
+            </div>
+            <div class="tier tier-mid" data-icing="#ffd6f0">
+              <svg class="drip" viewBox="0 0 100 20" preserveAspectRatio="none" aria-hidden="true"></svg>
+              <div class="sprinkles"></div>
+              <span class="tier-text">Swathi</span>
+            </div>
+            <div class="tier tier-bot" data-icing="#ffffff">
+              <svg class="drip" viewBox="0 0 100 20" preserveAspectRatio="none" aria-hidden="true"></svg>
+              <div class="sprinkles"></div>
+              <span class="tier-text small">✿ 21 ✿ 21 ✿ 21 ✿</span>
+            </div>
+            <div class="plate"></div>
+          </div>
+        </div>
+
+        <p class="cake-status" id="cakeStatus"></p>
+        <div class="cake-actions">
+          <button class="btn btn-blue" onclick="blowAll()">Blow them all 💨</button>
+          <button class="btn btn-green" onclick="relight()">Relight 🔥</button>
+        </div>
+
+        <div class="wish-result paper-card" id="wishResult">
+          <div class="wr-big">🌟 WISH GRANTED! 🌟</div>
+          <p>May Chapter 21 bring you everything you wished for, Swathi, and a few extra surprises 💖</p>
         </div>
       </div>
-      <div class="photo-caption">
-        <div class="card-label">21 Years of Grace & Beauty</div>
-        <div class="lyric-text" id="lyricText">Welcome to Chapter 21, Swathi — 21 years of pure grace ✨</div>
-      </div>
-      <div class="slide-progress"><div class="slide-progress-fill" id="slideProgress"></div></div>
     </section>
 
-    <!-- Countdown / age timer -->
-    <section class="card timer-card">
-      <div class="timer-head">
-        <div>
-          <div class="card-label" id="timerLabel">Countdown</div>
-          <div class="card-title" id="timerTitle">Until Chapter 21 begins</div>
+    <!-- ==================== SRIRAM TEST ==================== -->
+    <section id="sriram">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <h2 class="section-title letterize">The Sriram Test</h2>
+          <p class="section-sub">official sister verification, very scientific 🧪</p>
         </div>
-        <div class="timer-date" id="timerDate"></div>
-      </div>
-      <div class="timer-grid" id="timerGrid"></div>
-      <div class="timer-foot" id="timerFoot"></div>
-    </section>
 
-    <!-- Cake -->
-    <section class="card cake-card">
-      <div class="card-label">Make a Wish 🎂</div>
-      <div class="cake-sub" id="cakeStatusText">Tap the cake to blow out the candles!</div>
-      <div class="cake-stage" onclick="blowCandles()">
-        <div class="candle-group">
-          <div class="candle"><div class="flame"></div></div>
-          <div class="candle"><div class="flame"></div></div>
-          <div class="candle"><div class="flame"></div></div>
+        <div class="quiz-card paper-card reveal">
+          <div class="quiz-badge">Question 1 of 1</div>
+          <h3 class="quiz-q">Do you agree that your brother Sriram is the best, coolest, most awesome brother in the entire universe? 😎</h3>
+          <p class="quiz-note">please answer honestly. science is watching.</p>
+
+          <div class="arena" id="arenaBox">
+            <button class="btn btn-green" id="btnYes" onclick="acceptTruth()">YES, 1000%! 💖</button>
+            <button class="btn btn-red" id="btnNo" onmouseover="dodgeNo()" ontouchstart="dodgeNo(event)" onclick="dodgeNo()">NO 👎</button>
+          </div>
+          <div class="taunt" id="tauntText"></div>
+
+          <div class="certificate" id="certificate">
+            <div class="cert-title">🏆 Official Certificate 🏆</div>
+            <p>This certifies that <b>Swathi</b> has officially confirmed that <b>Sriram</b> is the best, coolest, most awesome brother in the entire universe. No take-backs.</p>
+            <div class="cert-sign"><span>Signed: Swathi ✍️</span><span>Witness: the cat 🐾</span></div>
+          </div>
         </div>
-        <div class="cake-tier-top"></div>
-        <div class="cake-tier-bottom"></div>
-        <div class="cake-stand"></div>
       </div>
-      <button class="pill-btn" onclick="blowCandles()">Blow 💨</button>
     </section>
 
-    <!-- Sriram test -->
-    <section class="card quiz-card">
-      <div class="card-label">The Sriram Test 👑</div>
-      <div class="quiz-question">Is your brother Sriram the best, coolest brother in the entire universe? 😎</div>
-      <div class="arena" id="arenaBox">
-        <button id="btnYes" onclick="acceptTruth()">YES, 1000%! 💖</button>
-        <button id="btnNo" onmouseover="dodgeNo()" ontouchstart="dodgeNo(event)" onclick="dodgeNo()">NO 👎</button>
+    <!-- ==================== 21 WISHES ==================== -->
+    <section id="wishes">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <h2 class="section-title letterize">21 Wishes for 21</h2>
+          <p class="section-sub">tap each bubble to open a wish 💌</p>
+        </div>
+        <div class="wish-grid" id="wishGrid"></div>
+        <p class="wish-count" id="wishCount">0 / 21 wishes opened</p>
       </div>
-      <div class="taunt-msg" id="tauntText">Answer honestly. Science is watching.</div>
     </section>
-
-    <!-- Filmstrip -->
-    <div class="filmstrip" id="filmstrip"></div>
 
   </main>
+
+  <footer>
+    <div class="footer-cat">
+      <div id="footerCat"></div>
+      <span class="zzz"><i>z</i><i>z</i><i>Z</i></span>
+    </div>
+    <p class="big">Happy 21st, Swathi! 🎂</p>
+    <p>made with 💖 and way too many crayons by <b>Sriram</b></p>
+  </footer>
+
+  <!-- The cat that walks along the bottom (tap it!) -->
+  <div class="cat-walker" id="catWalker" title="pet me!">
+    <div class="meow-bubble" id="meowText">meow! 🎂</div>
+    <div class="cat-flip" id="catFlip"></div>
+  </div>
 
   <audio id="audioPlayer" preload="auto" loop playsinline>
     <source src="Clean%20Bandit%20-%20Rather%20Be%20(Lyrics)%20feat.%20Jess%20Glynne.mp3" type="audio/mpeg">
@@ -482,10 +1221,8 @@
   </audio>
 
   <script>
-    // ===== EDIT THIS: Swathi's date of birth (year, month 1-12, day) =====
+    // ===== Swathi's date of birth (year, month 1-12, day) =====
     const BIRTH = { year: 2005, month: 11, day: 1 };
-
-    const SLIDE_MS = 5000;
 
     const photos = [
       "IMG-20260920-WA0007.jpg",
@@ -531,199 +1268,536 @@
       "Happy 21st Birthday, Swathi! 🎂🎉💖"
     ];
 
-    const total = photos.length;
-    const pad = n => String(n).padStart(2, "0");
+    const wishes = [
+      "A year full of belly laughs 😂",
+      "Endless chai & late-night chats ☕",
+      "Adventures in brand-new places ✈️",
+      "Friends who feel like family 💞",
+      "Smashing every exam & goal 📚",
+      "More cat videos than you can watch 🐱",
+      "Good hair days, every day 💇‍♀️",
+      "Songs that make you dance 🎶",
+      "Courage to try new things 🦋",
+      "Sunsets worth stopping for 🌅",
+      "Surprise treats & desserts 🍰",
+      "Calm on the busy days 🌿",
+      "Big dreams that come true ✨",
+      "Cosy rainy-day naps 🌧️",
+      "Spontaneous road trips 🚗",
+      "Photos you actually like 📸",
+      "Kindness coming back to you 🤍",
+      "Zero Monday blues 🙅‍♀️",
+      "Health, happiness & sparkle 🌟",
+      "A brother who keeps annoying you (lovingly) 😼",
+      "The best chapter yet: Chapter 21 👑"
+    ];
+
+    const MEOWS = [
+      "meow! happy birthday 🎂",
+      "purr... you're 21?! 😺",
+      "more cake please 🍰",
+      "Sriram told me to say he's the best 😼",
+      "mrrrow 💖",
+      "*happy tail wiggles*"
+    ];
+
+    const INK = "#3a2e5c";
+    const COLORS = ["#ff5a5f", "#ffa630", "#ffd93d", "#6bcb77", "#4d96ff", "#9b5de5", "#f15bb5", "#00bbf9"];
+    const TEXT_COLORS = ["#ff5a5f", "#4d96ff", "#9b5de5", "#f15bb5", "#2bb673", "#ff8c1a"];
+
     const $ = id => document.getElementById(id);
+    const pad = n => String(n).padStart(2, "0");
+    const rand = (a, b) => a + Math.random() * (b - a);
+    const pick = arr => arr[Math.floor(Math.random() * arr.length)];
+    const total = photos.length;
 
-    const mainScreen = $("mainScreen");
-    const filmstrip = $("filmstrip");
-    const ambientBg = $("ambientBg");
-    const lyricText = $("lyricText");
-    const screenBadge = $("screenBadge");
-    const slideProgress = $("slideProgress");
-    const playPauseBtn = $("playPauseBtn");
-    const audioPlayer = $("audioPlayer");
-    const audioToggle = $("audioToggle");
-
-    function blastConfetti() {
+    function blastConfetti(opts = {}) {
       if (typeof confetti !== "function") return;
-      confetti({ particleCount: 85, spread: 90, origin: { y: 0.6 }, colors: ['#ffd700', '#ff4d88', '#00f2fe', '#ffffff'] });
+      confetti(Object.assign({ particleCount: 90, spread: 100, origin: { y: 0.6 }, colors: COLORS }, opts));
+    }
+    function heartBurst(x, y) {
+      if (typeof confetti !== "function") return;
+      confetti({
+        particleCount: 30,
+        spread: 70,
+        startVelocity: 28,
+        origin: { x: x / innerWidth, y: y / innerHeight },
+        colors: ["#f15bb5", "#ff5a5f", "#ffd93d"]
+      });
     }
 
+    // ================= SCRIBBLY BACKGROUND =================
+    const doodleSvg = $("doodles");
+    const shapes = {
+      squiggle(x, y, s) {
+        let d = `M${x} ${y}`;
+        for (let k = 0; k < 6; k++) d += ` q ${s / 12} ${k % 2 ? -s / 5 : s / 5} ${s / 6} 0`;
+        return d;
+      },
+      zigzag(x, y, s) {
+        let d = `M${x} ${y}`;
+        for (let k = 0; k < 7; k++) d += ` l ${s / 7} ${k % 2 ? -s / 5 : s / 5}`;
+        return d;
+      },
+      spiral(x, y, s) {
+        let d = "";
+        for (let k = 0; k <= 48; k++) {
+          const a = (k / 48) * Math.PI * 5, r = (k / 48) * s / 2;
+          d += (k ? " L" : "M") + (x + r * Math.cos(a)).toFixed(1) + " " + (y + r * Math.sin(a)).toFixed(1);
+        }
+        return d;
+      },
+      star(x, y, s) {
+        let d = "";
+        for (let k = 0; k < 10; k++) {
+          const a = -Math.PI / 2 + (k * Math.PI) / 5, r = k % 2 ? s / 5 : s / 2;
+          d += (k ? " L" : "M") + (x + r * Math.cos(a)).toFixed(1) + " " + (y + r * Math.sin(a)).toFixed(1);
+        }
+        return d + " Z";
+      },
+      heart(x, y, s) {
+        return `M${x} ${y + s * 0.3} C${x - s * 0.6} ${y - s * 0.1} ${x - s * 0.25} ${y - s * 0.55} ${x} ${y - s * 0.2} ` +
+               `C${x + s * 0.25} ${y - s * 0.55} ${x + s * 0.6} ${y - s * 0.1} ${x} ${y + s * 0.3} Z`;
+      },
+      loops(x, y, s) {
+        let d = "";
+        for (let k = 0; k <= 70; k++) {
+          const t = (k / 70) * Math.PI * 8;
+          d += (k ? " L" : "M") + (x + (t * s) / 26 + Math.cos(t) * s / 9).toFixed(1) + " " + (y + Math.sin(t) * s / 9).toFixed(1);
+        }
+        return d;
+      },
+      scribble(x, y, s) {
+        let d = "";
+        for (let k = 0; k <= 60; k++) {
+          const a = (k / 60) * Math.PI * 4, r = (s / 2) * (0.75 + Math.random() * 0.25);
+          d += (k ? " L" : "M") + (x + r * Math.cos(a)).toFixed(1) + " " + (y + r * 0.7 * Math.sin(a)).toFixed(1);
+        }
+        return d;
+      }
+    };
+
+    let doodleWidth = 0;
+    function drawDoodles(force) {
+      const w = innerWidth, h = innerHeight;
+      if (!force && w === doodleWidth) return;   // ignore mobile address-bar height jiggles
+      doodleWidth = w;
+      doodleSvg.setAttribute("viewBox", `0 0 ${w} ${h}`);
+      const names = Object.keys(shapes);
+      const count = Math.round((w * h) / 30000) + 10;
+      let html = "";
+      for (let i = 0; i < count; i++) {
+        const d = shapes[pick(names)](rand(0, w), rand(0, h), rand(40, 110));
+        html += `<path class="doodle" pathLength="1" d="${d}" stroke="${pick(COLORS)}" ` +
+                `stroke-width="${rand(3, 6).toFixed(1)}" style="--d:${rand(0, 2.5).toFixed(2)}s"/>`;
+      }
+      doodleSvg.innerHTML = `<g filter="url(#rough)">${html}</g>`;
+    }
+    drawDoodles(true);
+    let resizeTimer = null;
+    window.addEventListener("resize", () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(() => drawDoodles(false), 300);
+    });
+
+    // ================= BUBBLY LETTERS =================
+    function letterize(el) {
+      const words = el.textContent.trim().split(/\s+/);
+      let i = Math.floor(Math.random() * COLORS.length);
+      el.innerHTML = words.map(w =>
+        `<span class="word">${[...w].map(ch =>
+          `<span class="ltr" style="color:${COLORS[i % COLORS.length]};--i:${i++}">${ch}</span>`).join("")}</span>`
+      ).join(" ");
+    }
+    document.querySelectorAll(".letterize").forEach(letterize);
+
+    // ================= CATS =================
+    function catSitSVG({ fur = "#ffa630", belly = "#ffe0b3", hat = false, sleepy = false } = {}) {
+      const stroke = `stroke="${INK}" stroke-width="4" stroke-linejoin="round"`;
+      return `<svg class="cat-sit${sleepy ? " sleepy" : ""}" viewBox="0 0 200 212" aria-hidden="true">
+        <g class="cat-tail">
+          <path d="M138 170 C 188 165, 196 112, 168 92" fill="none" stroke="${INK}" stroke-width="20" stroke-linecap="round"/>
+          <path d="M138 170 C 188 165, 196 112, 168 92" fill="none" stroke="${fur}" stroke-width="12" stroke-linecap="round"/>
+        </g>
+        <ellipse cx="100" cy="158" rx="50" ry="44" fill="${fur}" ${stroke}/>
+        <ellipse cx="100" cy="166" rx="28" ry="30" fill="${belly}"/>
+        <ellipse cx="80" cy="200" rx="15" ry="9" fill="${fur}" ${stroke}/>
+        <ellipse cx="120" cy="200" rx="15" ry="9" fill="${fur}" ${stroke}/>
+        <g class="cat-head">
+          <polygon points="64,70 70,26 98,54" fill="${fur}" ${stroke}/>
+          <polygon points="136,70 130,26 102,54" fill="${fur}" ${stroke}/>
+          <polygon points="72,62 74,38 90,54" fill="#ffb3c7"/>
+          <polygon points="128,62 126,38 110,54" fill="#ffb3c7"/>
+          <circle cx="100" cy="90" r="44" fill="${fur}" ${stroke}/>
+          <g class="cat-eyes">
+            <ellipse cx="84" cy="88" rx="7" ry="9" fill="${INK}"/>
+            <ellipse cx="116" cy="88" rx="7" ry="9" fill="${INK}"/>
+            <circle cx="86" cy="85" r="2.6" fill="#fff"/>
+            <circle cx="118" cy="85" r="2.6" fill="#fff"/>
+          </g>
+          <g class="cat-sleep-eyes" fill="none" stroke="${INK}" stroke-width="4" stroke-linecap="round">
+            <path d="M76 90 q8 6 16 0"/><path d="M108 90 q8 6 16 0"/>
+          </g>
+          <circle cx="70" cy="104" r="7" fill="#ff8fab" opacity=".6"/>
+          <circle cx="130" cy="104" r="7" fill="#ff8fab" opacity=".6"/>
+          <path d="M95 100 L105 100 L100 106 Z" fill="#ff6b8b"/>
+          <path d="M100 106 q -5 7 -11 2 M100 106 q 5 7 11 2" stroke="${INK}" stroke-width="3" fill="none" stroke-linecap="round"/>
+          <path d="M58 98 L80 102 M58 110 L80 107 M142 98 L120 102 M142 110 L120 107" stroke="${INK}" stroke-width="2.5" stroke-linecap="round"/>
+          ${hat ? `<g class="cat-hat">
+            <polygon points="80,52 100,2 120,52" fill="#4d96ff" ${stroke}/>
+            <path d="M88 32 L112 32 M84 44 L116 44" stroke="#ffd93d" stroke-width="5"/>
+            <circle cx="100" cy="4" r="8" fill="#ffd93d" ${stroke}/>
+          </g>` : ""}
+        </g>
+      </svg>`;
+    }
+
+    function catWalkSVG(fur = "#8d93ab", belly = "#d7dbe8") {
+      const stroke = `stroke="${INK}" stroke-width="4" stroke-linejoin="round"`;
+      const leg = (x, cls) =>
+        `<g class="leg ${cls}" style="transform-origin:${x + 7.5}px 86px">
+           <rect x="${x}" y="80" width="15" height="46" rx="7.5" fill="${fur}" ${stroke}/>
+         </g>`;
+      return `<svg viewBox="0 0 232 140" aria-hidden="true">
+        <g class="cat-tail" style="transform-origin:54px 74px">
+          <path d="M54 74 C 18 68, 10 30, 32 14" fill="none" stroke="${INK}" stroke-width="20" stroke-linecap="round"/>
+          <path d="M54 74 C 18 68, 10 30, 32 14" fill="none" stroke="${fur}" stroke-width="12" stroke-linecap="round"/>
+        </g>
+        ${leg(64, "leg-b")}${leg(144, "leg-a")}
+        <ellipse cx="112" cy="78" rx="64" ry="32" fill="${fur}" ${stroke}/>
+        <ellipse cx="112" cy="92" rx="40" ry="13" fill="${belly}"/>
+        ${leg(84, "leg-a")}${leg(164, "leg-b")}
+        <g>
+          <polygon points="152,44 156,8 178,32" fill="${fur}" ${stroke}/>
+          <polygon points="182,32 200,6 206,44" fill="${fur}" ${stroke}/>
+          <polygon points="158,36 160,18 170,30" fill="#ffb3c7"/>
+          <polygon points="188,30 198,16 201,38" fill="#ffb3c7"/>
+          <circle cx="180" cy="60" r="31" fill="${fur}" ${stroke}/>
+          <g class="cat-eyes" style="transform-origin:182px 56px">
+            <ellipse cx="171" cy="56" rx="5" ry="7" fill="${INK}"/>
+            <ellipse cx="193" cy="56" rx="5" ry="7" fill="${INK}"/>
+            <circle cx="172.5" cy="53.5" r="1.8" fill="#fff"/>
+            <circle cx="194.5" cy="53.5" r="1.8" fill="#fff"/>
+          </g>
+          <circle cx="163" cy="70" r="5" fill="#ff8fab" opacity=".6"/>
+          <circle cx="200" cy="70" r="5" fill="#ff8fab" opacity=".6"/>
+          <path d="M178 66 L186 66 L182 71 Z" fill="#ff6b8b"/>
+          <path d="M182 71 q-4 5 -8 1 M182 71 q4 5 8 1" stroke="${INK}" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+          <path d="M204 64 L226 60 M204 71 L226 73" stroke="${INK}" stroke-width="2.5" stroke-linecap="round"/>
+        </g>
+      </svg>`;
+    }
+
+    $("heroCat").innerHTML = catSitSVG({ fur: "#ffa630", belly: "#ffe0b3", hat: true });
+    $("heroCatLeft").innerHTML = catSitSVG({ fur: "#b9a3f0", belly: "#efe7ff" });
+    $("cakeCat").innerHTML = catSitSVG({ fur: "#ffd1a1", belly: "#fff3e3", hat: true });
+    $("footerCat").innerHTML = catSitSVG({ fur: "#9b8cd6", belly: "#e7e0ff", sleepy: true });
+    $("catFlip").innerHTML = catWalkSVG();
+
+    let meowTimer = null;
+    $("catWalker").addEventListener("click", e => {
+      const walker = $("catWalker");
+      $("meowText").textContent = pick(MEOWS);
+      walker.classList.add("meowing");
+      heartBurst(e.clientX, e.clientY);
+      clearTimeout(meowTimer);
+      meowTimer = setTimeout(() => walker.classList.remove("meowing"), 2200);
+    });
+
     // ================= SLIDESHOW =================
-    let currentPhotoIdx = 0;
+    const SLIDE_MS = 5500;
+    const FX_MS = 1000;
+    const EFFECTS = [
+      { id: "zoom",   name: "Zoom Fade" },
+      { id: "slide",  name: "Swoosh" },
+      { id: "circle", name: "Bubble Pop" },
+      { id: "flip",   name: "Card Flip" },
+      { id: "wipe",   name: "Crayon Wipe" },
+      { id: "spin",   name: "Twirl" },
+      { id: "drop",   name: "Bounce Drop" }
+    ];
+
+    const slidesEl = $("slides");
+    const thumbsEl = $("thumbs");
+    const captionEl = $("caption");
+    const progressFill = $("progressFill");
+    const playBtn = $("playBtn");
+
+    const slides = photos.map((src, i) => {
+      const s = document.createElement("div");
+      s.className = "slide" + (i === 0 ? " active" : "");
+      s.innerHTML = `<img class="bg" src="${src}" alt="" aria-hidden="true"><img class="fg" src="${src}" alt="Memory ${i + 1}">`;
+      slidesEl.appendChild(s);
+      return s;
+    });
+
+    const thumbs = photos.map((src, i) => {
+      const t = document.createElement("div");
+      t.className = "thumb" + (i === 0 ? " active" : "");
+      t.style.setProperty("--r", rand(-5, 5).toFixed(1) + "deg");
+      t.innerHTML = `<img src="${src}" alt="Memory ${i + 1}" loading="lazy">`;
+      t.onclick = () => goTo(i, i >= cur ? 1 : -1);
+      thumbsEl.appendChild(t);
+      return t;
+    });
+
+    let cur = 0;
+    let fxCount = 0;
+    let fxTimer = null;
     let captionTimer = null;
-    let slideshowOn = false;
+    let playing = false;
     let slideStart = 0;
     let slideElapsed = 0;
 
-    photos.forEach((src, i) => {
-      const img = document.createElement("img");
-      img.src = src;
-      img.alt = "Memory " + (i + 1);
-      img.className = "screen-photo" + (i === 0 ? " active" : "");
-      mainScreen.insertBefore(img, mainScreen.firstChild);
-
-      const thumb = document.createElement("div");
-      thumb.className = "thumb-card" + (i === 0 ? " active" : "");
-      thumb.innerHTML = `<img src="${src}" alt="Memory ${i + 1}" loading="lazy" />`;
-      thumb.onclick = () => { selectPhoto(i); resetSlideClock(); };
-      filmstrip.appendChild(thumb);
-    });
-
-    const screenImgs = [...mainScreen.querySelectorAll(".screen-photo")].reverse();
-    const thumbs = [...filmstrip.children];
-    screenBadge.innerText = `MEMORY 01 / ${pad(total)}`;
-    ambientBg.style.backgroundImage = `url('${photos[0]}')`;
-
-    function selectPhoto(idx) {
-      screenImgs.forEach((el, i) => el.classList.toggle("active", i === idx));
-      thumbs.forEach((el, i) => el.classList.toggle("active", i === idx));
-
-      // Scroll only the filmstrip, never the page
-      const t = thumbs[idx];
-      filmstrip.scrollTo({ left: t.offsetLeft - (filmstrip.clientWidth - t.offsetWidth) / 2, behavior: "smooth" });
-
-      ambientBg.style.backgroundImage = `url('${photos[idx]}')`;
-
-      lyricText.style.opacity = 0;
-      clearTimeout(captionTimer);
-      captionTimer = setTimeout(() => {
-        lyricText.innerHTML = captions[idx] || "No place I'd rather be ❤️";
-        lyricText.style.opacity = 1;
-      }, 200);
-
-      screenBadge.innerText = `MEMORY ${pad(idx + 1)} / ${pad(total)}`;
-      if (idx === total - 1) blastConfetti();
-      currentPhotoIdx = idx;
+    function finishFx() {
+      slides.forEach((s, i) => { s.className = "slide" + (i === cur ? " active" : ""); });
     }
 
-    function stepPhoto(direction, manual) {
-      selectPhoto((currentPhotoIdx + direction + total) % total);
-      if (manual) resetSlideClock();
-    }
+    function goTo(idx, dir = 1) {
+      idx = (idx + total) % total;
+      if (idx === cur) return;
+      clearTimeout(fxTimer);
+      finishFx();
 
-    function resetSlideClock() {
+      const fx = EFFECTS[fxCount++ % EFFECTS.length];
+      const rev = dir < 0 ? " rev" : "";
+      slides[cur].className = `slide leaving fx out-${fx.id}${rev}`;
+      slides[idx].className = `slide active fx in-${fx.id}${rev}`;
+      cur = idx;
+      fxTimer = setTimeout(finishFx, FX_MS + 50);
+
+      updateSlideUI(fx);
       slideStart = performance.now();
       slideElapsed = 0;
     }
+    function nextSlide() { goTo(cur + 1, 1); }
+    function prevSlide() { goTo(cur - 1, -1); }
 
-    function toggleSlideshow() {
-      slideshowOn = !slideshowOn;
-      if (slideshowOn) slideStart = performance.now() - slideElapsed;
-      playPauseBtn.textContent = slideshowOn ? "❚❚" : "▶";
-      playPauseBtn.setAttribute("aria-label", slideshowOn ? "Pause slideshow" : "Play slideshow");
+    function updateSlideUI(fx) {
+      $("slideBadge").textContent = `📸 ${pad(cur + 1)} / ${pad(total)}`;
+
+      const fxBadge = $("fxBadge");
+      fxBadge.textContent = `✨ ${fx.name}`;
+      fxBadge.classList.remove("pop");
+      void fxBadge.offsetWidth;
+      fxBadge.classList.add("pop");
+
+      captionEl.classList.add("hide");
+      clearTimeout(captionTimer);
+      captionTimer = setTimeout(() => {
+        captionEl.textContent = captions[cur] || "No place I'd rather be ❤️";
+        captionEl.style.color = TEXT_COLORS[cur % TEXT_COLORS.length];
+        captionEl.classList.remove("hide");
+      }, 300);
+
+      thumbs.forEach((t, i) => t.classList.toggle("active", i === cur));
+      // Scroll only the thumbnail strip, never the page
+      const t = thumbs[cur];
+      thumbsEl.scrollTo({ left: t.offsetLeft - (thumbsEl.clientWidth - t.offsetWidth) / 2, behavior: "smooth" });
+
+      if (cur === total - 1) blastConfetti();
     }
 
-    function tickSlideshow(now) {
-      if (slideshowOn) {
+    function togglePlay() {
+      playing = !playing;
+      if (playing) slideStart = performance.now() - slideElapsed;
+      playBtn.textContent = playing ? "⏸ Pause" : "▶ Play";
+    }
+
+    function tickSlides(now) {
+      if (playing) {
         slideElapsed = now - slideStart;
-        if (slideElapsed >= SLIDE_MS) {
-          stepPhoto(1);
-          resetSlideClock();
-        }
+        if (slideElapsed >= SLIDE_MS) nextSlide();
       }
-      slideProgress.style.width = Math.min(100, (slideElapsed / SLIDE_MS) * 100) + "%";
-      requestAnimationFrame(tickSlideshow);
+      progressFill.style.width = Math.min(100, (slideElapsed / SLIDE_MS) * 100) + "%";
+      requestAnimationFrame(tickSlides);
     }
+
+    // Swipe on phones
+    let touchX = null;
+    const stage = $("slideStage");
+    stage.addEventListener("touchstart", e => { touchX = e.touches[0].clientX; }, { passive: true });
+    stage.addEventListener("touchend", e => {
+      if (touchX === null) return;
+      const dx = e.changedTouches[0].clientX - touchX;
+      if (Math.abs(dx) > 45) (dx < 0 ? nextSlide : prevSlide)();
+      touchX = null;
+    });
+
+    captionEl.textContent = captions[0];
+    captionEl.style.color = TEXT_COLORS[0];
+    $("slideBadge").textContent = `📸 01 / ${pad(total)}`;
+    $("fxBadge").textContent = `✨ ${EFFECTS[0].name}`;
+    playBtn.textContent = "▶ Play";
 
     // ================= COUNTDOWN / AGE TIMER =================
-    const timerGrid = $("timerGrid");
     const birth = new Date(BIRTH.year, BIRTH.month - 1, BIRTH.day);
     const turns21 = new Date(BIRTH.year + 21, BIRTH.month - 1, BIRTH.day);
-    let timerMode = null;
+    const countGrid = $("countGrid");
+    const BUBBLE_COLORS = ["#ff5a5f", "#ffa630", "#6bcb77", "#4d96ff", "#9b5de5"];
+    let countMode = null;
     let countdownCelebrated = false;
 
-    $("timerDate").innerText = turns21.toLocaleDateString(undefined, { weekday: "short", day: "numeric", month: "long", year: "numeric" });
+    $("countDate").textContent = "🗓️ " + turns21.toLocaleDateString(undefined, { weekday: "long", day: "numeric", month: "long", year: "numeric" });
 
-    function renderUnits(units) {
+    function renderCount(units) {
       const key = units.map(u => u[1]).join();
-      if (timerGrid.dataset.key !== key) {
-        timerGrid.dataset.key = key;
-        timerGrid.style.setProperty("--units", units.length);
-        timerGrid.innerHTML = units.map(([, label]) =>
-          `<div class="unit"><div class="unit-num">00</div><div class="unit-label">${label}</div></div>`).join("");
+      if (countGrid.dataset.key !== key) {
+        countGrid.dataset.key = key;
+        countGrid.innerHTML = units.map(([, label], i) =>
+          `<div class="count-bubble" style="--c:${BUBBLE_COLORS[i % BUBBLE_COLORS.length]}">
+             <span class="count-num">--</span><span class="count-lbl">${label}</span>
+           </div>`).join("");
       }
-      timerGrid.querySelectorAll(".unit-num").forEach((el, i) => { el.textContent = pad(units[i][0]); });
+      countGrid.querySelectorAll(".count-bubble").forEach((b, i) => {
+        const num = b.firstElementChild;
+        const v = pad(units[i][0]);
+        if (num.textContent !== v) {
+          num.textContent = v;
+          b.classList.remove("tick");
+          void b.offsetWidth;
+          b.classList.add("tick");
+        }
+      });
     }
 
-    function tickTimer() {
+    function setCountText(mode, title, foot) {
+      if (countMode === mode) return;
+      countMode = mode;
+      $("countTitle").textContent = title;
+      $("countFoot").innerHTML = foot;
+    }
+
+    function tickCount() {
       const now = new Date();
       const msLeft = turns21 - now;
 
       if (msLeft > 0) {
         const s = Math.floor(msLeft / 1000);
-        renderUnits([[Math.floor(s / 86400), "Days"], [Math.floor(s / 3600) % 24, "Hours"], [Math.floor(s / 60) % 60, "Mins"], [s % 60, "Secs"]]);
-        if (timerMode !== "countdown") {
-          timerMode = "countdown";
-          $("timerLabel").innerText = "Countdown ⏳";
-          $("timerTitle").innerText = "Until Chapter 21 begins";
-          $("timerFoot").innerHTML = "The countdown to <strong>21</strong> is on — get the cake ready!";
-        }
+        renderCount([
+          [Math.floor(s / 86400), "days"],
+          [Math.floor(s / 3600) % 24, "hours"],
+          [Math.floor(s / 60) % 60, "mins"],
+          [s % 60, "secs"]
+        ]);
+        setCountText("countdown", "⏳ Countdown to Chapter 21", "get the cake ready... it's almost time! 🎂");
         return;
       }
 
+      // Fire a party the moment the countdown hits zero
       if (!countdownCelebrated && msLeft > -2000) {
-        blastConfetti(); setTimeout(blastConfetti, 400); setTimeout(blastConfetti, 800);
+        blastConfetti();
+        setTimeout(() => blastConfetti({ origin: { x: 0.2, y: 0.6 } }), 400);
+        setTimeout(() => blastConfetti({ origin: { x: 0.8, y: 0.6 } }), 800);
       }
       countdownCelebrated = true;
 
-      // Time since her last birthday, plus whole years
       let years = now.getFullYear() - birth.getFullYear();
       let lastBirthday = new Date(now.getFullYear(), birth.getMonth(), birth.getDate());
-      if (lastBirthday > now) { years--; lastBirthday = new Date(now.getFullYear() - 1, birth.getMonth(), birth.getDate()); }
+      if (lastBirthday > now) {
+        years--;
+        lastBirthday = new Date(now.getFullYear() - 1, birth.getMonth(), birth.getDate());
+      }
       const s = Math.floor((now - lastBirthday) / 1000);
-      renderUnits([[years, "Years"], [Math.floor(s / 86400), "Days"], [Math.floor(s / 3600) % 24, "Hours"], [Math.floor(s / 60) % 60, "Mins"], [s % 60, "Secs"]]);
+      renderCount([
+        [years, "years"],
+        [Math.floor(s / 86400), "days"],
+        [Math.floor(s / 3600) % 24, "hours"],
+        [Math.floor(s / 60) % 60, "mins"],
+        [s % 60, "secs"]
+      ]);
 
       const isToday = now.getMonth() === birth.getMonth() && now.getDate() === birth.getDate();
-      const mode = isToday ? "today" : "age";
-      if (timerMode !== mode) {
-        timerMode = mode;
-        $("timerLabel").innerText = isToday ? "It's Today! 🎉" : "Living Chapter 21 ✨";
-        $("timerTitle").innerText = isToday ? "Happy Birthday, Swathi!" : "Swathi's time on Earth";
-        $("timerFoot").innerHTML = "Every second of it <strong>worth celebrating</strong> 💖";
-      }
-    }
-
-    // ================= MUSIC =================
-    audioPlayer.addEventListener("play", () => audioToggle.classList.remove("paused"));
-    audioPlayer.addEventListener("pause", () => audioToggle.classList.add("paused"));
-
-    function toggleMusic() {
-      if (audioPlayer.paused) audioPlayer.play().catch(e => console.log("Audio unavailable:", e));
-      else audioPlayer.pause();
-    }
-
-    // ================= ENTRANCE =================
-    let palaceEntered = false;
-    function enterPalace() {
-      if (palaceEntered) return;
-      palaceEntered = true;
-
-      const curtain = $("revealCurtain");
-      curtain.style.opacity = "0";
-      curtain.style.pointerEvents = "none";
-      setTimeout(() => curtain.style.visibility = "hidden", 900);
-
-      audioPlayer.play().catch(e => console.log("Audio waiting:", e));
-      blastConfetti();
-      setTimeout(blastConfetti, 400);
-
-      slideshowOn = true;
-      resetSlideClock();
+      if (isToday) setCountText("today", "🎉 IT'S TODAY! Happy Birthday!", "officially twenty-one, and counting every second 💖");
+      else setCountText("age", "✨ Living Chapter 21", "Swathi's time on Earth, every second worth celebrating 💖");
     }
 
     // ================= CAKE =================
-    let candlesBlown = false;
-    function blowCandles() {
-      if (candlesBlown) return;
-      candlesBlown = true;
-      document.querySelectorAll(".flame").forEach(f => f.classList.add("blown"));
-      const status = $("cakeStatusText");
-      status.innerHTML = "🌟 <strong>WISH GRANTED!</strong> May your 21st be full of joy!";
-      status.style.color = "var(--gold)";
-      blastConfetti(); setTimeout(blastConfetti, 350); setTimeout(blastConfetti, 700);
+    const CANDLES = ["s", "s", "s", "2", "1", "s", "s", "s"];
+    const candlesEl = $("candles");
+    let candlesLeft = 0;
+
+    document.querySelectorAll(".tier").forEach(tier => {
+      // Wobbly icing drips along the top of each tier
+      let d = "M0 0 H100 V6";
+      let x = 100;
+      while (x > 0) {
+        const w = Math.min(x, rand(7, 13));
+        d += ` Q${(x - w / 2).toFixed(1)} ${rand(9, 19).toFixed(1)} ${(x - w).toFixed(1)} 6`;
+        x -= w;
+      }
+      d += " Z";
+      tier.querySelector(".drip").innerHTML =
+        `<path d="${d}" fill="${tier.dataset.icing}" stroke="${INK}" stroke-width="3" vector-effect="non-scaling-stroke"/>`;
+
+      const sprinkles = tier.querySelector(".sprinkles");
+      for (let i = 0; i < 28; i++) {
+        const sp = document.createElement("i");
+        sp.style.cssText = `left:${rand(4, 94)}%;top:${rand(40, 85)}%;background:${pick(COLORS)};transform:rotate(${rand(0, 180)}deg)`;
+        sprinkles.appendChild(sp);
+      }
+    });
+
+    function buildCandles() {
+      candlesEl.innerHTML = "";
+      CANDLES.forEach((type, i) => {
+        const c = document.createElement("div");
+        c.className = type === "s" ? "candle small" : "candle num";
+        c.tabIndex = 0;
+        c.setAttribute("role", "button");
+        c.setAttribute("aria-label", "Blow out candle");
+        if (type === "s") {
+          c.style.setProperty("--stripe", COLORS[i % COLORS.length]);
+          c.innerHTML = `<span class="wick"></span><span class="flame"></span>`;
+        } else {
+          c.innerHTML = `<span class="num-txt" style="color:${type === "2" ? "#4d96ff" : "#f15bb5"}">${type}</span>` +
+                        `<span class="wick"></span><span class="flame"></span>`;
+        }
+        c.addEventListener("click", () => blowOne(c));
+        c.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); blowOne(c); } });
+        candlesEl.appendChild(c);
+      });
+      candlesLeft = CANDLES.length;
+      updateCakeStatus();
     }
+
+    function blowOne(c) {
+      if (c.classList.contains("out")) return;
+      c.classList.add("out");
+      const smoke = document.createElement("span");
+      smoke.className = "smoke";
+      c.appendChild(smoke);
+      setTimeout(() => smoke.remove(), 1600);
+      candlesLeft--;
+      updateCakeStatus();
+      if (candlesLeft === 0) wishGranted();
+    }
+
+    function blowAll() {
+      [...candlesEl.children].forEach((c, i) => setTimeout(() => blowOne(c), i * 110));
+    }
+
+    function relight() {
+      $("wishResult").classList.remove("show");
+      $("cakeCat").classList.remove("party");
+      buildCandles();
+    }
+
+    function updateCakeStatus() {
+      $("cakeStatus").textContent = candlesLeft
+        ? `${candlesLeft} candle${candlesLeft > 1 ? "s" : ""} still burning 🔥 tap them!`
+        : "All candles out! 🎉";
+    }
+
+    function wishGranted() {
+      $("wishResult").classList.add("show");
+      $("cakeCat").classList.add("party");
+      blastConfetti();
+      setTimeout(() => blastConfetti({ origin: { x: 0.2, y: 0.6 } }), 300);
+      setTimeout(() => blastConfetti({ origin: { x: 0.8, y: 0.6 } }), 600);
+    }
+
+    buildCandles();
 
     // ================= SRIRAM TEST =================
     const btnNo = $("btnNo");
@@ -731,15 +1805,16 @@
     const arenaBox = $("arenaBox");
     const tauntText = $("tauntText");
 
-    const MAX_YES_SCALE = 1.4;
+    const MAX_YES_SCALE = 1.6;
     let yesScale = 1.0;
     let dodgeCount = 0;
     const taunts = [
       "Nice try! The 'No' button is slippery! 😜",
       "Error 404: 'No' does not exist in this universe!",
       "Are you sure? Try clicking No again! 😂",
-      "Accept the reality, Swathi! Sriram is the GOAT!",
+      "Accept the reality, Swathi! Sriram is the GOAT! 🐐",
       "The 'YES' button is growing for a reason!",
+      "Even the cat says press YES 😼",
       "Resistance is futile! Press YES! ✨"
     ];
 
@@ -749,38 +1824,114 @@
 
       dodgeCount++;
       btnNo.style.position = "absolute";
-      const maxX = Math.max(4, arenaBox.clientWidth - btnNo.offsetWidth - 4);
-      const maxY = Math.max(4, arenaBox.clientHeight - btnNo.offsetHeight - 4);
-      btnNo.style.left = Math.max(4, Math.random() * maxX) + "px";
-      btnNo.style.top = Math.max(4, Math.random() * maxY) + "px";
+      const maxX = Math.max(6, arenaBox.clientWidth - btnNo.offsetWidth - 6);
+      const maxY = Math.max(6, arenaBox.clientHeight - btnNo.offsetHeight - 6);
+      btnNo.style.left = Math.max(6, Math.random() * maxX) + "px";
+      btnNo.style.top = Math.max(6, Math.random() * maxY) + "px";
 
       yesScale = Math.min(MAX_YES_SCALE, yesScale + 0.1);
       btnYes.style.transform = `scale(${yesScale})`;
-      tauntText.innerText = taunts[dodgeCount % taunts.length];
+      tauntText.textContent = taunts[dodgeCount % taunts.length];
     }
 
     function acceptTruth() {
+      btnNo.style.display = "none";
+      tauntText.textContent = "Correct answer! 🎉 The cat is very proud of you.";
+      $("certificate").classList.add("show");
       blastConfetti();
       setTimeout(blastConfetti, 400);
-      tauntText.innerText = "✅ Recorded: Sriram is officially the best brother in the universe! 🏆";
-      btnNo.style.display = "none";
+    }
+
+    // ================= 21 WISHES =================
+    const wishGrid = $("wishGrid");
+    let wishesOpened = 0;
+
+    wishes.forEach((text, i) => {
+      const el = document.createElement("button");
+      el.className = "wish reveal";
+      el.style.setProperty("--c", COLORS[i % COLORS.length]);
+      el.style.setProperty("--r", rand(-3, 3).toFixed(1) + "deg");
+      el.style.transitionDelay = (i % 6) * 60 + "ms";
+      el.innerHTML =
+        `<span class="wish-inner">
+           <span class="wish-face wish-front"><span class="wish-num">${i + 1}</span><span class="wish-tap">tap me!</span></span>
+           <span class="wish-face wish-back">${text}</span>
+         </span>`;
+      el.addEventListener("click", () => {
+        el.classList.toggle("flipped");
+        if (el.dataset.seen) return;
+        el.dataset.seen = "1";
+        wishesOpened++;
+        if (wishesOpened === wishes.length) {
+          $("wishCount").textContent = "You opened all 21 wishes! 🎉 Every single one is yours.";
+          blastConfetti({ particleCount: 150 });
+        } else {
+          $("wishCount").textContent = `${wishesOpened} / ${wishes.length} wishes opened`;
+        }
+      });
+      wishGrid.appendChild(el);
+    });
+
+    // ================= SCROLL REVEAL + NAV HIGHLIGHT =================
+    const revealObs = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting) return;
+        entry.target.classList.add("shown");
+        revealObs.unobserve(entry.target);
+      });
+    }, { threshold: 0.12 });
+    document.querySelectorAll(".reveal").forEach(el => revealObs.observe(el));
+
+    const navLinks = [...document.querySelectorAll(".bubble-nav a")];
+    const sectionObs = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting) return;
+        navLinks.forEach(a => a.classList.toggle("active", a.getAttribute("href") === "#" + entry.target.id));
+      });
+    }, { rootMargin: "-45% 0px -50% 0px" });
+    document.querySelectorAll("main section[id]").forEach(s => sectionObs.observe(s));
+
+    // ================= MUSIC =================
+    const audioPlayer = $("audioPlayer");
+    const musicBtn = $("musicBtn");
+    audioPlayer.addEventListener("play", () => musicBtn.classList.remove("paused"));
+    audioPlayer.addEventListener("pause", () => musicBtn.classList.add("paused"));
+
+    function toggleMusic() {
+      if (audioPlayer.paused) audioPlayer.play().catch(e => console.log("Audio unavailable:", e));
+      else audioPlayer.pause();
+    }
+
+    // ================= GIFT OPENING =================
+    let giftOpened = false;
+    function openGift() {
+      if (giftOpened) return;
+      giftOpened = true;
+
+      // Start the song inside the tap so browsers allow it
+      audioPlayer.play().catch(e => console.log("Audio waiting:", e));
+
+      $("gift").classList.add("open");
+      blastConfetti({ particleCount: 160, spread: 140, origin: { y: 0.5 } });
+
+      setTimeout(() => {
+        $("giftCurtain").classList.add("gone");
+        document.body.classList.remove("locked");
+        drawDoodles(true);   // replay the doodle draw-in now she can see it
+        togglePlay();        // start the slideshow
+      }, 1000);
     }
 
     // ================= KEYBOARD =================
-    window.addEventListener("keydown", (e) => {
-      if (!palaceEntered) return;
-      if (e.key === "ArrowRight") stepPhoto(1, true);
-      if (e.key === "ArrowLeft") stepPhoto(-1, true);
-      if (e.key === " ") {
-        // Stop space from also "clicking" whichever button has focus
-        e.preventDefault();
-        toggleMusic();
-      }
+    window.addEventListener("keydown", e => {
+      if (!giftOpened) return;
+      if (e.key === "ArrowRight") nextSlide();
+      if (e.key === "ArrowLeft") prevSlide();
     });
 
-    tickTimer();
-    setInterval(tickTimer, 1000);
-    requestAnimationFrame(tickSlideshow);
+    tickCount();
+    setInterval(tickCount, 1000);
+    requestAnimationFrame(tickSlides);
   </script>
 </body>
 </html>
