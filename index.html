@@ -2,21 +2,23 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>Happy Birthday Swathi ✨</title>
-  
-  <!-- Fonts & Confetti -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Chapter 21 — Happy Birthday Swathi ✨</title>
+
+  <!-- Google Luxury Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,800;1,400&family=Plus+Jakarta+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;800&family=Playfair+Display:ital,wght@0,500;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
   <style>
     :root {
-      --primary: #ffd700;
+      --gold: #f6d365;
+      --gold-dark: #fda085;
       --accent: #ff4d88;
-      --glass: rgba(255, 255, 255, 0.08);
-      --glass-border: rgba(255, 255, 255, 0.18);
+      --bg-dark: #07050d;
+      --glass: rgba(255, 255, 255, 0.06);
+      --border: rgba(255, 255, 255, 0.12);
     }
 
     * {
@@ -24,350 +26,517 @@
       margin: 0;
       padding: 0;
       user-select: none;
-      -webkit-tap-highlight-color: transparent;
     }
 
     body {
-      background: #06050b;
+      background: var(--bg-dark);
       color: #fff;
       font-family: 'Plus Jakarta Sans', sans-serif;
-      overflow: hidden;
       height: 100vh;
       width: 100vw;
+      overflow: hidden;
       display: flex;
-      justify-content: center;
-      align-items: center;
+      flex-direction: column;
+      position: relative;
     }
 
-    /* Ambient dynamic blur layer */
+    /* Ambient Dynamic Aura Background */
     #ambientBg {
       position: absolute;
-      inset: -20px;
+      inset: -40px;
       background-size: cover;
       background-position: center;
-      filter: blur(60px) brightness(0.35) saturate(1.4);
+      filter: blur(80px) brightness(0.28) saturate(1.6);
       transform: scale(1.15);
-      transition: background-image 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+      transition: background-image 1.4s cubic-bezier(0.25, 1, 0.5, 1);
       z-index: 1;
     }
 
-    /* Floating Stardust Canvas */
-    #particleCanvas {
+    /* Interactive Golden Stardust Canvas */
+    #stardustCanvas {
       position: absolute;
       inset: 0;
       z-index: 2;
       pointer-events: none;
     }
 
-    /* Main Showcase Stage */
-    .experience-container {
+    /* Top Navigation Header */
+    header {
       position: relative;
-      z-index: 10;
-      width: 100%;
-      max-width: 440px;
-      height: 94vh;
-      max-height: 850px;
-      border-radius: 36px;
-      background: rgba(18, 14, 28, 0.65);
-      backdrop-filter: blur(25px);
-      -webkit-backdrop-filter: blur(25px);
-      border: 1px solid var(--glass-border);
-      box-shadow: 0 30px 90px rgba(0, 0, 0, 0.8), 0 0 50px rgba(255, 77, 136, 0.15);
+      z-index: 20;
       display: flex;
-      flex-direction: column;
-      overflow: hidden;
+      justify-content: space-between;
+      align-items: center;
+      padding: 24px 48px;
     }
 
-    /* Top Story Bar */
-    .story-progress {
-      position: absolute;
-      top: 16px;
-      left: 18px;
-      right: 18px;
+    .brand-mark {
+      font-family: 'Cinzel', serif;
+      font-size: 16px;
+      letter-spacing: 4px;
+      color: var(--gold);
+      font-weight: 700;
+    }
+
+    .header-actions {
       display: flex;
-      gap: 5px;
-      z-index: 30;
+      gap: 16px;
+      align-items: center;
     }
 
-    .bar-segment {
-      flex: 1;
-      height: 3.5px;
-      background: rgba(255, 255, 255, 0.2);
-      border-radius: 4px;
-      overflow: hidden;
-    }
-
-    .bar-fill {
-      height: 100%;
-      width: 0%;
-      background: linear-gradient(90deg, #ffd700, #ff4d88);
-      border-radius: 4px;
-    }
-
-    /* Equalizer Sound Button */
-    .sound-chip {
-      position: absolute;
-      top: 32px;
-      right: 20px;
-      z-index: 35;
-      background: rgba(0, 0, 0, 0.5);
-      backdrop-filter: blur(10px);
-      border: 1px solid var(--glass-border);
-      padding: 8px 14px;
-      border-radius: 20px;
+    .action-btn {
+      background: var(--glass);
+      border: 1px solid var(--border);
+      color: #fff;
+      padding: 10px 22px;
+      border-radius: 30px;
+      font-size: 13px;
+      font-weight: 600;
+      backdrop-filter: blur(15px);
+      cursor: pointer;
       display: flex;
       align-items: center;
       gap: 8px;
-      cursor: pointer;
-      transition: transform 0.2s ease;
+      transition: all 0.3s ease;
     }
 
-    .sound-chip:active {
-      transform: scale(0.92);
+    .action-btn:hover {
+      background: rgba(255, 255, 255, 0.15);
+      border-color: var(--gold);
+      transform: translateY(-2px);
     }
 
-    .eq-bars {
+    /* Live Audio Visualizer Bars */
+    .eq-box {
       display: flex;
       align-items: flex-end;
-      gap: 2.5px;
+      gap: 3px;
       height: 14px;
     }
-
     .eq-bar {
       width: 2.5px;
-      background: var(--primary);
+      background: var(--gold);
       border-radius: 2px;
-      animation: bounceEq 1s ease-in-out infinite alternate;
+      animation: bounce 0.9s ease-in-out infinite alternate;
     }
     .eq-bar:nth-child(1) { height: 40%; animation-delay: 0.1s; }
     .eq-bar:nth-child(2) { height: 90%; animation-delay: 0.3s; }
     .eq-bar:nth-child(3) { height: 60%; animation-delay: 0.2s; }
+    .paused .eq-bar { animation: none; height: 30%; }
 
-    @keyframes bounceEq {
-      0% { height: 20%; }
-      100% { height: 100%; }
-    }
+    @keyframes bounce { 0% { height: 25%; } 100% { height: 100%; } }
 
-    .paused .eq-bar {
-      animation: none !important;
-      height: 30% !important;
-    }
-
-    /* Image Display Area */
-    .photo-stage {
+    /* Main Showcase Stage */
+    main {
       position: relative;
+      z-index: 10;
       flex: 1;
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 40px;
+      align-items: center;
+      padding: 0 60px 20px;
+      max-width: 1400px;
+      margin: 0 auto;
       width: 100%;
-      overflow: hidden;
-      cursor: pointer;
     }
 
-    .photo-slide {
+    /* Left: Hero Photo Frame with Floating Badges */
+    .hero-photo-wrapper {
+      position: relative;
+      height: 58vh;
+      max-height: 560px;
+      border-radius: 28px;
+      overflow: hidden;
+      box-shadow: 0 35px 80px rgba(0, 0, 0, 0.7), 0 0 45px rgba(246, 211, 101, 0.15);
+      border: 1px solid var(--border);
+      background: #000;
+    }
+
+    .hero-img {
       position: absolute;
       inset: 0;
       width: 100%;
       height: 100%;
       object-fit: cover;
       opacity: 0;
-      transform: scale(1.06);
-      transition: opacity 0.9s cubic-bezier(0.4, 0, 0.2, 1), transform 5s ease-out;
-      pointer-events: none;
+      transform: scale(1.08);
+      transition: opacity 1s cubic-bezier(0.4, 0, 0.2, 1), transform 6s ease-out;
     }
 
-    .photo-slide.active {
+    .hero-img.active {
       opacity: 1;
       transform: scale(1);
     }
 
-    /* Tap zones for story next/prev */
-    .nav-zone {
+    .badge-21 {
       position: absolute;
-      top: 0;
-      bottom: 0;
-      width: 35%;
-      z-index: 25;
-    }
-    .nav-left { left: 0; }
-    .nav-right { right: 0; }
-
-    /* Bottom Floating Love Note */
-    .card-footer {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      padding: 50px 24px 30px;
-      background: linear-gradient(to top, rgba(10, 7, 18, 0.96) 20%, rgba(10, 7, 18, 0.6) 70%, transparent);
-      z-index: 30;
-      text-align: center;
-      pointer-events: none;
+      top: 24px;
+      left: 24px;
+      z-index: 15;
+      background: rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(246, 211, 101, 0.4);
+      padding: 8px 18px;
+      border-radius: 20px;
+      font-family: 'Cinzel', serif;
+      font-size: 13px;
+      color: var(--gold);
+      letter-spacing: 2px;
     }
 
-    .title-banner {
-      font-family: 'Playfair Display', serif;
-      font-size: 27px;
+    /* Right: Editorial Typography Column */
+    .hero-info {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding-left: 20px;
+    }
+
+    .chapter-tag {
+      font-family: 'Cinzel', serif;
+      font-size: 15px;
+      color: var(--gold);
+      letter-spacing: 5px;
+      text-transform: uppercase;
+      margin-bottom: 12px;
       font-weight: 700;
-      background: linear-gradient(120deg, #fff 30%, #ffd700 80%, #ff8fb3);
+    }
+
+    .headline {
+      font-family: 'Playfair Display', serif;
+      font-size: 52px;
+      font-weight: 700;
+      line-height: 1.15;
+      margin-bottom: 20px;
+      background: linear-gradient(135deg, #ffffff 40%, var(--gold) 85%, #ffb6c1);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-      margin-bottom: 6px;
-      letter-spacing: -0.3px;
     }
 
-    .quote-box {
-      font-size: 14.5px;
+    .lyric-box {
+      font-size: 20px;
+      font-weight: 300;
+      font-style: italic;
       color: rgba(255, 255, 255, 0.85);
-      font-weight: 400;
-      min-height: 24px;
+      line-height: 1.6;
+      margin-bottom: 28px;
+      min-height: 64px;
       transition: opacity 0.4s ease;
     }
 
-    .quote-box span {
-      color: var(--primary);
+    .lyric-box span {
+      color: var(--gold);
       font-weight: 600;
+      font-style: normal;
     }
 
-    /* Tap Floating Heart Particles */
-    .floating-heart {
-      position: fixed;
-      font-size: 26px;
-      pointer-events: none;
-      z-index: 999;
-      animation: floatUp 1.2s forwards cubic-bezier(0.1, 0.8, 0.3, 1);
+    /* Slideshow Controls */
+    .control-row {
+      display: flex;
+      align-items: center;
+      gap: 20px;
     }
 
-    @keyframes floatUp {
-      0% { opacity: 1; transform: translate(-50%, -50%) scale(0.6) rotate(0deg); }
-      100% { opacity: 0; transform: translate(-50%, -160px) scale(1.4) rotate(20deg); }
+    .nav-arrow-btn {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: var(--glass);
+      border: 1px solid var(--border);
+      color: #fff;
+      font-size: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      backdrop-filter: blur(10px);
+      transition: all 0.25s ease;
     }
 
-    /* Unboxing Reveal Ceremony Modal */
-    #revealModal {
+    .nav-arrow-btn:hover {
+      background: var(--gold);
+      color: #000;
+      transform: scale(1.08);
+    }
+
+    .counter-display {
+      font-family: 'Cinzel', serif;
+      font-size: 15px;
+      color: rgba(255, 255, 255, 0.6);
+      letter-spacing: 2px;
+    }
+
+    .counter-display strong {
+      color: #fff;
+      font-size: 18px;
+    }
+
+    /* Bottom: 19 Photos Filmstrip */
+    .filmstrip-tray {
+      position: relative;
+      z-index: 20;
+      padding: 12px 60px 24px;
+      max-width: 1400px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    .filmstrip-scroll {
+      display: flex;
+      gap: 12px;
+      overflow-x: auto;
+      padding: 8px 4px 14px;
+      scrollbar-width: thin;
+      scrollbar-color: var(--gold) transparent;
+    }
+
+    .filmstrip-scroll::-webkit-scrollbar {
+      height: 5px;
+    }
+    .filmstrip-scroll::-webkit-scrollbar-thumb {
+      background: rgba(246, 211, 101, 0.4);
+      border-radius: 10px;
+    }
+
+    .thumb-node {
+      flex: 0 0 65px;
+      height: 85px;
+      border-radius: 14px;
+      overflow: hidden;
+      cursor: pointer;
+      position: relative;
+      border: 2px solid transparent;
+      opacity: 0.5;
+      transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+    }
+
+    .thumb-node img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .thumb-node.active, .thumb-node:hover {
+      opacity: 1;
+      transform: translateY(-5px);
+      border-color: var(--gold);
+      box-shadow: 0 8px 20px rgba(246, 211, 101, 0.4);
+    }
+
+    /* Grand Entrance Reveal Modal */
+    #curtainModal {
       position: fixed;
       inset: 0;
-      background: radial-gradient(circle at center, #241638 0%, #06040b 100%);
-      z-index: 1000;
+      background: radial-gradient(circle at center, #24143a 0%, #06040b 100%);
+      z-index: 9999;
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
       text-align: center;
-      padding: 24px;
-      transition: opacity 0.8s ease, visibility 0.8s;
+      padding: 30px;
+      transition: opacity 1s cubic-bezier(0.4, 0, 0.2, 1), visibility 1s;
     }
 
-    .box-wrapper {
-      position: relative;
-      cursor: pointer;
-      margin-bottom: 30px;
+    .curtain-tag {
+      font-family: 'Cinzel', serif;
+      font-size: 16px;
+      color: var(--gold);
+      letter-spacing: 6px;
+      margin-bottom: 16px;
     }
 
-    .gift-ico {
-      font-size: 96px;
-      display: inline-block;
-      animation: boxWobble 2s ease-in-out infinite;
-      filter: drop-shadow(0 15px 35px rgba(255, 77, 136, 0.4));
-    }
-
-    @keyframes boxWobble {
-      0%, 100% { transform: translateY(0) rotate(0deg) scale(1); }
-      25% { transform: translateY(-12px) rotate(-6deg) scale(1.05); }
-      75% { transform: translateY(-6px) rotate(6deg) scale(1.05); }
-    }
-
-    .glow-aura {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      width: 140px;
-      height: 140px;
-      background: radial-gradient(circle, rgba(255, 215, 0, 0.45) 0%, transparent 70%);
-      transform: translate(-50%, -50%);
-      z-index: -1;
-      animation: auraPulse 2s infinite alternate;
-    }
-
-    @keyframes auraPulse {
-      0% { transform: translate(-50%, -50%) scale(0.8); opacity: 0.5; }
-      100% { transform: translate(-50%, -50%) scale(1.3); opacity: 1; }
-    }
-
-    .open-btn {
-      background: linear-gradient(135deg, #ffd700, #ff4d88);
-      color: #0b0813;
+    .curtain-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 64px;
       font-weight: 700;
-      font-size: 17px;
-      padding: 16px 36px;
+      color: #fff;
+      margin-bottom: 12px;
+      background: linear-gradient(135deg, #fff 40%, var(--gold) 90%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .curtain-sub {
+      color: rgba(255, 255, 255, 0.7);
+      font-size: 18px;
+      margin-bottom: 38px;
+    }
+
+    .unlock-btn {
+      background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+      color: #0d091a;
+      font-family: 'Cinzel', serif;
+      font-weight: 800;
+      font-size: 18px;
+      letter-spacing: 2px;
+      padding: 20px 52px;
       border-radius: 50px;
       border: none;
       cursor: pointer;
-      box-shadow: 0 10px 30px rgba(255, 77, 136, 0.4);
-      transition: transform 0.2s ease, box-shadow 0.2s;
+      box-shadow: 0 15px 45px rgba(246, 211, 101, 0.4);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
 
-    .open-btn:hover {
-      transform: scale(1.04);
-      box-shadow: 0 14px 40px rgba(255, 215, 0, 0.5);
+    .unlock-btn:hover {
+      transform: scale(1.06);
+      box-shadow: 0 20px 60px rgba(246, 211, 101, 0.6);
+    }
+
+    /* Milestone 21 Letter Modal */
+    #letterModal {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(20px);
+      z-index: 5000;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.4s ease;
+    }
+
+    #letterModal.open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .letter-card {
+      background: #14101e;
+      border: 1px solid rgba(246, 211, 101, 0.3);
+      max-width: 620px;
+      width: 90%;
+      border-radius: 32px;
+      padding: 45px 50px;
+      text-align: center;
+      box-shadow: 0 30px 90px rgba(0, 0, 0, 0.9), 0 0 50px rgba(246, 211, 101, 0.15);
+      position: relative;
+    }
+
+    .close-letter-btn {
+      position: absolute;
+      top: 24px;
+      right: 28px;
+      background: none;
+      border: none;
+      color: rgba(255, 255, 255, 0.6);
+      font-size: 24px;
+      cursor: pointer;
+    }
+
+    .letter-card h3 {
+      font-family: 'Cinzel', serif;
+      font-size: 26px;
+      color: var(--gold);
+      margin-bottom: 20px;
+    }
+
+    .letter-card p {
+      font-size: 16px;
+      line-height: 1.8;
+      color: rgba(255, 255, 255, 0.85);
+      margin-bottom: 16px;
+    }
+
+    /* Floating Tap Hearts */
+    .floating-heart {
+      position: fixed;
+      font-size: 26px;
+      pointer-events: none;
+      z-index: 99999;
+      animation: heartRise 1.4s forwards cubic-bezier(0.1, 0.8, 0.3, 1);
+    }
+    @keyframes heartRise {
+      0% { opacity: 1; transform: translate(-50%, -50%) scale(0.6); }
+      100% { opacity: 0; transform: translate(-50%, -180px) scale(1.6); }
     }
   </style>
 </head>
 <body onclick="spawnHeart(event)">
 
-  <!-- Blurred Background Glow -->
+  <!-- Ambient Blurred Glow of Current Photo -->
   <div id="ambientBg"></div>
 
-  <!-- Ambient Golden Stardust particles -->
-  <canvas id="particleCanvas"></canvas>
+  <!-- Interactive Golden Particle Trail -->
+  <canvas id="stardustCanvas"></canvas>
 
-  <!-- Reveal Overlay -->
-  <div id="revealModal">
-    <div class="box-wrapper" onclick="startExperience()">
-      <div class="glow-aura"></div>
-      <div class="gift-ico">🎁</div>
-    </div>
-    <h2 style="font-family:'Playfair Display', serif; font-size: 32px; margin-bottom: 12px; color: #fff;">For Swathi</h2>
-    <p style="color: rgba(255,255,255,0.7); font-size: 15px; margin-bottom: 26px;">A little musical birthday surprise made just for you ✨</p>
-    <button class="open-btn" onclick="startExperience()">Tap to Unwrap Gift</button>
+  <!-- Opening Reveal Screen -->
+  <div id="curtainModal">
+    <div class="curtain-tag">CHAPTER 21 // SPECIAL EDITION</div>
+    <h1 class="curtain-title">Swathi’s 21st Birthday</h1>
+    <p class="curtain-sub">A celebration of 21 unforgettable years of grace, warmth & smiles ✨</p>
+    <button class="unlock-btn" onclick="unlockExperience()">Unlock Chapter 21</button>
   </div>
 
-  <!-- Main Reel Card -->
-  <div class="experience-container">
-    <!-- Instagram Story Progress -->
-    <div class="story-progress" id="progressBar"></div>
-
-    <!-- Live Music Chip -->
-    <div class="sound-chip" id="soundChip" onclick="toggleAudio(event)">
-      <div class="eq-bars">
-        <div class="eq-bar"></div>
-        <div class="eq-bar"></div>
-        <div class="eq-bar"></div>
+  <!-- Top Navigation -->
+  <header>
+    <div class="brand-mark">SWATHI • 21</div>
+    <div class="header-actions">
+      <button class="action-btn" onclick="openLetter(event)">💌 Read Birthday Letter</button>
+      <div class="action-btn" id="soundChip" onclick="toggleAudio(event)">
+        <div class="eq-box">
+          <div class="eq-bar"></div>
+          <div class="eq-bar"></div>
+          <div class="eq-bar"></div>
+        </div>
+        <span>Rather Be</span>
       </div>
-      <span style="font-size: 12px; font-weight: 600; color: #fff;">Rather Be</span>
+    </div>
+  </header>
+
+  <!-- Main Cinema Stage -->
+  <main>
+    <!-- Left Hero Photo Display -->
+    <div class="hero-photo-wrapper" id="heroStage">
+      <div class="badge-21">CHAPTER 21</div>
+      <!-- Photos populated by JS -->
     </div>
 
-    <!-- Clickable Navigation Zones -->
-    <div class="nav-zone nav-left" onclick="prevSlide(event)"></div>
-    <div class="nav-zone nav-right" onclick="nextSlide(event)"></div>
+    <!-- Right Editorial Content -->
+    <div class="hero-info">
+      <div class="chapter-tag" id="photoIndexTag">MEMORY 01 OF 19</div>
+      <h2 class="headline">Happy 21st, Swathi! 🌸</h2>
+      <div class="lyric-box" id="lyricText">"We're a thousand miles from comfort, we have traveled land and sea..."</div>
 
-    <!-- Photo Display -->
-    <div class="photo-stage" id="stage"></div>
+      <!-- Controls -->
+      <div class="control-row">
+        <button class="nav-arrow-btn" onclick="stepSlide(-1, event)">←</button>
+        <button class="nav-arrow-btn" onclick="stepSlide(1, event)">→</button>
+        <div class="counter-display" id="counterDisplay">
+          <strong id="currentNum">01</strong> / 19
+        </div>
+      </div>
+    </div>
+  </main>
 
-    <!-- Captions -->
-    <div class="card-footer">
-      <h1 class="title-banner">Happy Birthday Swathi 🌸</h1>
-      <div class="quote-box" id="quoteBox">When I am with you, there's no place I'd rather be ❤️</div>
+  <!-- Bottom 19-Photo Filmstrip Tray -->
+  <div class="filmstrip-tray">
+    <div class="filmstrip-scroll" id="filmstripScroll"></div>
+  </div>
+
+  <!-- 21st Birthday Letter Modal -->
+  <div id="letterModal" onclick="closeLetter(event)">
+    <div class="letter-card" onclick="event.stopPropagation()">
+      <button class="close-letter-btn" onclick="closeLetter(event)">✕</button>
+      <h3>Happy 21st Birthday Swathi ✨</h3>
+      <p>Twenty-one years of bringing light, laughter, and grace into the world.</p>
+      <p>Entering Chapter 21 is a celebration of who you are and all the beautiful milestones yet to unfold. May this milestone year bring you boundless happiness, cherished adventures, and every dream you set your heart on.</p>
+      <p style="color: var(--gold); font-weight: 600;">"When I am with you, there's no place I'd rather be." ❤️</p>
     </div>
   </div>
 
-  <!-- Audio Element with comprehensive fallbacks -->
-  <audio id="player" preload="auto" loop playsinline>
+  <!-- Audio Player with direct filenames -->
+  <audio id="musicPlayer" preload="auto" loop playsinline>
     <source src="Clean Bandit - Rather Be (Lyrics) feat. Jess Glynne.mp3" type="audio/mpeg">
     <source src="Clean%20Bandit%20-%20Rather%20Be%20(Lyrics)%20feat.%20Jess%20Glynne.mp3" type="audio/mpeg">
     <source src="song.mp3" type="audio/mpeg">
   </audio>
 
   <script>
-    // YOUR 19 PHOTOS
+    // EXACT 19 PHOTOS
     const photos = [
       "IMG-20260920-WA0007.jpg",
       "IMG-20260920-WA0002.jpg",
@@ -390,201 +559,229 @@
       "IMG-20260902-WA0018.jpg"
     ];
 
-    // Cinematic captions cycling through the photos
     const captions = [
-      "Happy Birthday to the sweetest soul ✨",
+      "Welcome to Chapter 21, Swathi — 21 years of pure grace ✨",
       "We're a thousand miles from comfort...",
       "We have traveled land and sea 🌊",
       "As long as you are with me...",
       "There's no place I'd rather be ❤️",
-      "Celebrating your beautiful presence today 🌸",
-      "Your smile lights up every room 💫",
-      "Exalted in the scene...",
-      "As long as I am with you ✨",
+      "Celebrating your radiant smile and gentle warmth 🌸",
+      "Exalted in the scene, glowing as always 💫",
+      "As long as I am with you...",
       "My heart continues to beat 💖",
-      "With every step we take...",
-      "Strolling so casually 🌿",
+      "With every step we take together 🌿",
+      "Strolling so casually through the memories...",
       "Switch up the batteries ⚡",
       "If you gave me a chance, I would take it 🎶",
       "It's a shot in the dark, but I'll make it 🎯",
       "Know with all of your heart, you can't shake me!",
       "When I am with you...",
       "No place I'd rather be! 🥂",
-      "Wishing you the most magical year ahead, Swathi! 🎂✨"
+      "Here's to making your 21st year the most unforgettable chapter yet ✨",
+      "Happy 21st Birthday, Swathi! 🎂🎉💖"
     ];
 
-    const stage = document.getElementById("stage");
+    const heroStage = document.getElementById("heroStage");
+    const filmstripScroll = document.getElementById("filmstripScroll");
     const ambientBg = document.getElementById("ambientBg");
-    const progressBar = document.getElementById("progressBar");
-    const quoteBox = document.getElementById("quoteBox");
-    const player = document.getElementById("player");
+    const lyricText = document.getElementById("lyricText");
+    const photoIndexTag = document.getElementById("photoIndexTag");
+    const currentNum = document.getElementById("currentNum");
+    const musicPlayer = document.getElementById("musicPlayer");
     const soundChip = document.getElementById("soundChip");
 
-    let currentIndex = 0;
-    let timer = null;
-    const DURATION = 3200; // 3.2s per photo for a relaxed cinematic pace
+    let activeIndex = 0;
+    let autoTimer = null;
+    const PACE = 3600; // 3.6s per slide
 
-    // Build DOM for images & progress bars
+    // Populate Hero Slides & Bottom Filmstrip
     photos.forEach((src, idx) => {
+      // Main hero slide
       const img = document.createElement("img");
       img.src = src;
-      img.className = "photo-slide" + (idx === 0 ? " active" : "");
-      img.id = "slide-" + idx;
-      stage.appendChild(img);
+      img.className = "hero-img" + (idx === 0 ? " active" : "");
+      img.id = "hero-" + idx;
+      heroStage.appendChild(img);
 
-      const seg = document.createElement("div");
-      seg.className = "bar-segment";
-      seg.innerHTML = `<div class="bar-fill" id="fill-${idx}"></div>`;
-      progressBar.appendChild(seg);
+      // Thumbnail
+      const thumb = document.createElement("div");
+      thumb.className = "thumb-node" + (idx === 0 ? " active" : "");
+      thumb.id = "thumb-" + idx;
+      thumb.innerHTML = `<img src="${src}" alt="Memory ${idx + 1}" />`;
+      thumb.onclick = (e) => {
+        e.stopPropagation();
+        goToSlide(idx);
+      };
+      filmstripScroll.appendChild(thumb);
     });
 
     ambientBg.style.backgroundImage = `url('${photos[0]}')`;
 
-    function updateSlide(newIdx) {
-      document.querySelectorAll(".photo-slide").forEach((el, i) => {
-        el.classList.toggle("active", i === newIdx);
+    function goToSlide(idx) {
+      document.querySelectorAll(".hero-img").forEach((el, i) => {
+        el.classList.toggle("active", i === idx);
+      });
+      document.querySelectorAll(".thumb-node").forEach((el, i) => {
+        el.classList.toggle("active", i === idx);
       });
 
-      document.querySelectorAll(".bar-fill").forEach((el, i) => {
-        el.style.width = i <= newIdx ? "100%" : "0%";
-      });
+      // Scroll thumbnail into view
+      const activeThumb = document.getElementById("thumb-" + idx);
+      if (activeThumb) {
+        activeThumb.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+      }
 
-      ambientBg.style.backgroundImage = `url('${photos[newIdx]}')`;
+      ambientBg.style.backgroundImage = `url('${photos[idx]}')`;
 
-      // Update caption with fade
-      quoteBox.style.opacity = 0;
+      // Update captions
+      lyricText.style.opacity = 0;
       setTimeout(() => {
-        quoteBox.innerHTML = captions[newIdx] || "No place I'd rather be ❤️";
-        quoteBox.style.opacity = 1;
+        lyricText.innerHTML = captions[idx] || "No place I'd rather be ❤️";
+        lyricText.style.opacity = 1;
       }, 250);
 
-      currentIndex = newIdx;
+      const padded = (idx + 1) < 10 ? "0" + (idx + 1) : (idx + 1);
+      photoIndexTag.innerText = `MEMORY ${padded} OF 19`;
+      currentNum.innerText = padded;
+
+      activeIndex = idx;
+      resetAutoPlay();
     }
 
-    function nextSlide(e) {
+    function stepSlide(step, e) {
       if (e) e.stopPropagation();
-      clearInterval(timer);
-      const next = (currentIndex + 1) % photos.length;
-      updateSlide(next);
-      if (next % 4 === 0) blastConfetti();
-      startAutoPlay();
+      let next = (activeIndex + step + photos.length) % photos.length;
+      goToSlide(next);
+      if (next === 0 || next === 13) fireGrandConfetti();
     }
 
-    function prevSlide(e) {
-      if (e) e.stopPropagation();
-      clearInterval(timer);
-      const prev = (currentIndex - 1 + photos.length) % photos.length;
-      updateSlide(prev);
-      startAutoPlay();
+    function resetAutoPlay() {
+      clearInterval(autoTimer);
+      autoTimer = setInterval(() => {
+        stepSlide(1);
+      }, PACE);
     }
 
-    function startAutoPlay() {
-      clearInterval(timer);
-      timer = setInterval(() => {
-        nextSlide();
-      }, DURATION);
-    }
-
-    function blastConfetti() {
+    function fireGrandConfetti() {
       confetti({
-        particleCount: 65,
-        spread: 80,
-        origin: { y: 0.65 },
-        colors: ['#ffd700', '#ff4d88', '#ffffff', '#a855f7']
+        particleCount: 80,
+        spread: 90,
+        origin: { y: 0.6 },
+        colors: ['#f6d365', '#fda085', '#ff4d88', '#ffffff']
       });
     }
 
     function spawnHeart(e) {
       const heart = document.createElement('div');
       heart.className = 'floating-heart';
-      const symbols = ['💖', '✨', '🌸', '💫', '💛'];
-      heart.innerText = symbols[Math.floor(Math.random() * symbols.length)];
+      const items = ['💖', '✨', '🌸', '💫', '💛', '🥂', '🎉'];
+      heart.innerText = items[Math.floor(Math.random() * items.length)];
       heart.style.left = e.clientX + 'px';
       heart.style.top = e.clientY + 'px';
       document.body.appendChild(heart);
-      setTimeout(() => heart.remove(), 1200);
+      setTimeout(() => heart.remove(), 1400);
     }
 
     function toggleAudio(e) {
       if (e) e.stopPropagation();
-      if (player.paused) {
-        player.play();
+      if (musicPlayer.paused) {
+        musicPlayer.play();
         soundChip.classList.remove('paused');
       } else {
-        player.pause();
+        musicPlayer.pause();
         soundChip.classList.add('paused');
       }
     }
 
-    function startExperience() {
-      const modal = document.getElementById("revealModal");
-      modal.style.opacity = "0";
-      setTimeout(() => modal.style.visibility = "hidden", 800);
+    function unlockExperience() {
+      const curtain = document.getElementById("curtainModal");
+      curtain.style.opacity = "0";
+      setTimeout(() => curtain.style.visibility = "hidden", 1000);
 
-      // Play audio cleanly inside the touch gesture
-      player.volume = 1.0;
-      const playPromise = player.play();
-      if (playPromise !== undefined) {
-        playPromise.then(() => {
-          soundChip.classList.remove('paused');
-        }).catch(err => {
-          console.warn("Audio waiting for secondary tap:", err);
-          soundChip.classList.add('paused');
-        });
-      }
+      // Play music directly inside user gesture
+      musicPlayer.play().then(() => {
+        soundChip.classList.remove('paused');
+      }).catch(err => {
+        console.log("Audio block bypass:", err);
+      });
 
-      // Grand celebration burst
-      blastConfetti();
-      setTimeout(blastConfetti, 450);
-      setTimeout(blastConfetti, 900);
+      fireGrandConfetti();
+      setTimeout(fireGrandConfetti, 400);
 
-      updateSlide(0);
-      startAutoPlay();
+      goToSlide(0);
     }
 
-    // Ambient Stardust Canvas
-    const canvas = document.getElementById('particleCanvas');
+    function openLetter(e) {
+      if (e) e.stopPropagation();
+      document.getElementById("letterModal").classList.add("open");
+    }
+
+    function closeLetter(e) {
+      if (e) e.stopPropagation();
+      document.getElementById("letterModal").classList.remove("open");
+    }
+
+    // Keyboard Navigation for laptop
+    window.addEventListener("keydown", (e) => {
+      if (e.key === "ArrowRight") stepSlide(1);
+      if (e.key === "ArrowLeft") stepSlide(-1);
+      if (e.key === " ") toggleAudio();
+      if (e.key === "Escape") closeLetter();
+    });
+
+    // Golden Stardust Cursor Canvas Effect
+    const canvas = document.getElementById('stardustCanvas');
     const ctx = canvas.getContext('2d');
     let particles = [];
 
-    function resizeCanvas() {
+    function resize() {
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
     }
-    window.addEventListener('resize', resizeCanvas);
-    resizeCanvas();
+    window.addEventListener('resize', resize);
+    resize();
 
-    class Particle {
-      constructor() {
-        this.reset();
-      }
-      reset() {
-        this.x = Math.random() * canvas.width;
-        this.y = Math.random() * canvas.height;
-        this.size = Math.random() * 2 + 0.6;
-        this.speedY = -(Math.random() * 0.5 + 0.2);
-        this.opacity = Math.random() * 0.7 + 0.3;
+    class Stardust {
+      constructor(x, y) {
+        this.x = x;
+        this.y = y;
+        this.size = Math.random() * 3 + 1;
+        this.speedX = (Math.random() - 0.5) * 1.5;
+        this.speedY = (Math.random() - 0.5) * 1.5;
+        this.alpha = 1;
       }
       update() {
+        this.x += this.speedX;
         this.y += this.speedY;
-        if (this.y < 0) this.y = canvas.height;
+        this.alpha -= 0.02;
       }
       draw() {
-        ctx.fillStyle = `rgba(255, 215, 0, ${this.opacity})`;
+        ctx.save();
+        ctx.globalAlpha = this.alpha;
+        ctx.fillStyle = '#f6d365';
         ctx.beginPath();
         ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
         ctx.fill();
+        ctx.restore();
       }
     }
 
-    for (let i = 0; i < 40; i++) particles.push(new Particle());
+    window.addEventListener('mousemove', (e) => {
+      for (let i = 0; i < 2; i++) {
+        particles.push(new Stardust(e.clientX, e.clientY));
+      }
+    });
 
-    function animateParticles() {
+    function renderParticles() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-      particles.forEach(p => { p.update(); p.draw(); });
-      requestAnimationFrame(animateParticles);
+      particles.forEach((p, idx) => {
+        p.update();
+        p.draw();
+        if (p.alpha <= 0) particles.splice(idx, 1);
+      });
+      requestAnimationFrame(renderParticles);
     }
-    animateParticles();
+    renderParticles();
   </script>
 </body>
 </html>
