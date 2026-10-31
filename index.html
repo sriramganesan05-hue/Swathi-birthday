@@ -2499,15 +2499,23 @@
     // or ?story to jump straight into the surprise.
     const params = new URLSearchParams(location.search);
     const TEST_MODE = params.has("test");
-    const birth = new Date(BIRTH.year, BIRTH.month - 1, BIRTH.day);
-    let turns21 = TEST_MODE ? new Date(Date.now() + 3600000) : new Date(BIRTH.year + 21, BIRTH.month - 1, BIRTH.day);
+    // Everything runs on India time (IST, UTC+5:30), so the countdown hits zero at
+    // midnight in India no matter where the page is opened.
+    const IST_OFFSET_MS = 330 * 60000;
+    const istMidnight = (y, m, d) => new Date(Date.UTC(y, m - 1, d) - IST_OFFSET_MS);
+    const istParts = date => {   // the calendar date in India for a given moment
+      const shifted = new Date(date.getTime() + IST_OFFSET_MS);
+      return { y: shifted.getUTCFullYear(), m: shifted.getUTCMonth() + 1, d: shifted.getUTCDate() };
+    };
+    let turns21 = TEST_MODE ? new Date(Date.now() + 3600000) : istMidnight(BIRTH.year + 21, BIRTH.month, BIRTH.day);
     const countGrid = $("countGrid");
     const BUBBLE_COLORS = ["#ff5a5f", "#ffa630", "#6bcb77", "#4d96ff", "#9b5de5"];
     let countMode = null;
     let countdownCelebrated = false;
 
     function updateCountDate() {
-      $("countDate").textContent = "🗓️ " + turns21.toLocaleDateString(undefined, { weekday: "long", day: "numeric", month: "long", year: "numeric" });
+      const day = turns21.toLocaleDateString("en-IN", { weekday: "long", day: "numeric", month: "long", year: "numeric", timeZone: "Asia/Kolkata" });
+      $("countDate").textContent = TEST_MODE ? "🗓️ " + day : `🗓️ ${day} · midnight, India time 🇮🇳`;
     }
     updateCountDate();
 
@@ -2576,11 +2584,12 @@
       }
       countdownCelebrated = true;
 
-      let years = now.getFullYear() - birth.getFullYear();
-      let lastBirthday = new Date(now.getFullYear(), birth.getMonth(), birth.getDate());
+      const today = istParts(now);
+      let years = today.y - BIRTH.year;
+      let lastBirthday = istMidnight(today.y, BIRTH.month, BIRTH.day);
       if (lastBirthday > now) {
         years--;
-        lastBirthday = new Date(now.getFullYear() - 1, birth.getMonth(), birth.getDate());
+        lastBirthday = istMidnight(today.y - 1, BIRTH.month, BIRTH.day);
       }
       const s = Math.floor((now - lastBirthday) / 1000);
       renderCount([
@@ -2591,7 +2600,7 @@
         [s % 60, "secs"]
       ]);
 
-      const isToday = now.getMonth() === birth.getMonth() && now.getDate() === birth.getDate();
+      const isToday = isBirthdayToday();
       if (isToday) setCountText("today", "🎉 IT'S TODAY! Happy Birthday!", "officially twenty-one, and counting every second 💖");
       else setCountText("age", "✨ Living Chapter 21", "Swathi's time on Earth, every second worth celebrating 💖");
     }
@@ -2873,8 +2882,8 @@
     }
 
     function isBirthdayToday() {
-      const n = new Date();
-      return n.getMonth() === birth.getMonth() && n.getDate() === birth.getDate();
+      const today = istParts(new Date());   // is it her birthday in India right now?
+      return today.m === BIRTH.month && today.d === BIRTH.day;
     }
 
     // On her birthday, the show plays by itself the first time she scrolls to the cake
@@ -3873,37 +3882,11 @@
       while (!giftOpened) await sleep(300);
       await sleep(3500);
 
-      show(document.querySelector(".count-card"));
-      await sleep(3500);
-
-      show(document.querySelector(".slideshow"));
-      await sleep(2500);
-      for (let i = 0; i < 3; i++) { nextSlide(); await sleep(2200); }
-
-      show($("partyStage"));
-      await sleep(1500);
-      await celebrate();
-      await sleep(1500);
-
-      show(document.querySelector(".quiz-card"));
-      await sleep(2000);
-      for (let i = 0; i < NO_VANISH_AT; i++) {
-        lastDodge = 0;
-        dodgeNo();
-        await sleep(700);
-      }
-      await sleep(2500);
-      acceptTruth();
-      await sleep(4000);
-
-      show($("wishGrid"));
-      await sleep(1500);
-      const cards = [...document.querySelectorAll(".wish")];
-      for (let i = 0; i < 8; i++) { cards[i].click(); await sleep(450); }
-      await sleep(2500);
+      // ?demo=countdown skips straight to the countdown and the big surprise
+      if (params.get("demo") !== "countdown") await demoPageTour(show);
 
       // Make the countdown hit zero in a few seconds to show the big surprise
-      show($("home"), "start");
+      show(document.querySelector(".count-card"));
       await sleep(1500);
       turns21 = new Date(Date.now() + 13000);
       countdownCelebrated = false;
@@ -3939,6 +3922,39 @@
 
       startFinale();
     }
+
+    // The first half of the demo: a quick tour of every section of the page
+    async function demoPageTour(show) {
+      show(document.querySelector(".count-card"));
+      await sleep(3500);
+
+      show(document.querySelector(".slideshow"));
+      await sleep(2500);
+      for (let i = 0; i < 3; i++) { nextSlide(); await sleep(2200); }
+
+      show($("partyStage"));
+      await sleep(1500);
+      await celebrate();
+      await sleep(1500);
+
+      show(document.querySelector(".quiz-card"));
+      await sleep(2000);
+      for (let i = 0; i < NO_VANISH_AT; i++) {
+        lastDodge = 0;
+        dodgeNo();
+        await sleep(700);
+      }
+      await sleep(2500);
+      acceptTruth();
+      await sleep(4000);
+
+      show($("wishGrid"));
+      await sleep(1500);
+      const cards = [...document.querySelectorAll(".wish")];
+      for (let i = 0; i < 8; i++) { cards[i].click(); await sleep(450); }
+      await sleep(2500);
+
+    }
     if (params.has("demo")) runDemo();
 
     tickCount();
@@ -3947,4 +3963,3 @@
   </script>
 </body>
 </html>
-
